@@ -1,0 +1,349 @@
+--[[
+    ╔══════════════════════════════════════════════════════╗
+    ║  ⌬  ZENONIX HUB V1.0 // ROBLOX SCRIPTING MASTER  ⌬  ║
+    ║  >> DEV: Itamaru | CROSS-PLATFORM OPTIMIZED         ║
+    ╚══════════════════════════════════════════════════════╝
+]]--
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+
+-- ==================== [ CONFIGURATION ] ====================
+local Settings = {
+    Aimlock = false, ShowFOV = false, FOVRadius = 150, Prediction = 0.165, Smoothing = 0.2,
+    Hitbox = false, HitboxSize = 15, KillAura = false, AutoAttack = false,
+    ESP = false, Tracers = false, ESPColor = Color3.fromRGB(0, 255, 255),
+    SpeedHack = false, SpeedValue = 100, InfJump = false, Noclip = false, Spinbot = false,
+    FullBright = false, NightMode = false,
+    MenuKey = Enum.KeyCode.RightControl
+}
+
+local FOVCircle = Drawing.new("Circle")
+FOVCircle.Color = Color3.fromRGB(191, 0, 255) -- Purple Neon
+FOVCircle.Thickness = 1.5
+FOVCircle.Filled = false
+FOVCircle.Transparency = 1
+
+local ESPBoxes = {}
+local Tracers = {}
+
+-- ==================== [ CORE UI SYSTEM ] ====================
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "Zenonix_Hub"
+ScreenGui.ResetOnSpawn = false
+pcall(function() ScreenGui.Parent = game:GetService("CoreGui") or LocalPlayer.PlayerGui end)
+
+local function MakeDraggable(obj)
+    local dragging, dragInput, dragStart, startPos
+    obj.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true; dragStart = input.Position; startPos = obj.Position
+            input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then dragging = false end end)
+        end
+    end)
+    obj.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end
+    end)
+    RunService.RenderStepped:Connect(function()
+        if dragging and dragInput then
+            local delta = dragInput.Position - dragStart
+            obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
+
+-- [ NOTIFICATION ENGINE ]
+local function Notify(title, msg, color)
+    local f = Instance.new("Frame")
+    f.Size = UDim2.new(0, 280, 0, 60)
+    f.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    f.BackgroundTransparency = 0.1
+    f.Parent = ScreenGui
+    
+    local stroke = Instance.new("UIStroke", f)
+    stroke.Color = color or Color3.fromRGB(0, 255, 255)
+    stroke.Thickness = 2
+    Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
+
+    local t = Instance.new("TextLabel", f)
+    t.Size = UDim2.new(1, -20, 1, 0)
+    t.Position = UDim2.new(0, 10, 0, 0)
+    t.Text = "<b>" .. title .. "</b>\n" .. msg
+    t.RichText = true
+    t.TextColor3 = Color3.new(1,1,1)
+    t.Font = Enum.Font.Gotham
+    t.TextSize = 13
+    t.BackgroundTransparency = 1
+    t.TextXAlignment = Enum.TextXAlignment.Left
+
+    f.Position = UDim2.new(1.2, 0, 0.85, 0)
+    TweenService:Create(f, TweenInfo.new(0.5, Enum.EasingStyle.BackOut), {Position = UDim2.new(1, -300, 0.85, 0)}):Play()
+    task.delay(3, function()
+        TweenService:Create(f, TweenInfo.new(0.5, Enum.EasingStyle.QuartIn), {Position = UDim2.new(1.2, 0, 0.85, 0)}):Play()
+        task.wait(0.5) f:Destroy()
+    end)
+end
+
+-- ==================== [ MAIN INTERFACE ] ====================
+local Main = Instance.new("Frame")
+Main.Size = UDim2.new(0, 580, 0, 350)
+Main.Position = UDim2.new(0.5, -290, 0.5, -175)
+Main.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
+Main.Visible = false
+Main.Parent = ScreenGui
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
+MakeDraggable(Main)
+
+-- Gradient Stroke for Zenonix Style
+local MainStroke = Instance.new("UIStroke", Main)
+MainStroke.Thickness = 2
+local Gradient = Instance.new("UIGradient", MainStroke)
+Gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 255)), -- Cyan
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(191, 0, 255))  -- Purple
+}
+
+local Title = Instance.new("TextLabel", Main)
+Title.Text = "⌬ ZENONIX HUB"
+Title.Font = Enum.Font.GothamBlack
+Title.TextColor3 = Color3.new(1,1,1)
+Title.TextSize = 20
+Title.Position = UDim2.new(0, 20, 0, 15)
+Title.Size = UDim2.new(0, 200, 0, 30)
+Title.BackgroundTransparency = 1
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+local CloseBtn = Instance.new("TextButton", Main)
+CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+CloseBtn.Position = UDim2.new(1, -40, 0, 15)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.new(1, 1, 1)
+CloseBtn.Font = Enum.Font.GothamBold
+Instance.new("UICorner", CloseBtn)
+CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+
+local Sidebar = Instance.new("Frame", Main)
+Sidebar.Size = UDim2.new(0, 150, 1, -60)
+Sidebar.Position = UDim2.new(0, 10, 0, 50)
+Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 8)
+
+local Container = Instance.new("Frame", Main)
+Container.Size = UDim2.new(1, -180, 1, -60)
+Container.Position = UDim2.new(0, 170, 0, 50)
+Container.BackgroundTransparency = 1
+
+local Tabs = 0
+local function AddTab(name, icon)
+    local page = Instance.new("ScrollingFrame", Container)
+    page.Size = UDim2.new(1, 0, 1, 0)
+    page.BackgroundTransparency = 1
+    page.Visible = (Tabs == 0)
+    page.ScrollBarThickness = 2
+    page.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
+    Instance.new("UIListLayout", page).Padding = UDim.new(0, 8)
+
+    local btn = Instance.new("TextButton", Sidebar)
+    btn.Size = UDim2.new(0.9, 0, 0, 40)
+    btn.Position = UDim2.new(0.05, 0, 0, Tabs * 45 + 10)
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    btn.Text = icon .. "  " .. name
+    btn.TextColor3 = Color3.new(0.8,0.8,0.8)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 13
+    Instance.new("UICorner", btn)
+
+    btn.MouseButton1Click:Connect(function()
+        for _, v in pairs(Container:GetChildren()) do if v:IsA("ScrollingFrame") then v.Visible = false end end
+        page.Visible = true
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 70)}):Play()
+        task.wait(0.2)
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(30, 30, 40)}):Play()
+    end)
+    Tabs = Tabs + 1
+    return page
+end
+
+local CombatTab = AddTab("Combat", "⚔️")
+local VisualTab = AddTab("Visuals", "👁️")
+local PlayerTab = AddTab("Player", "🏃")
+local WorldTab = AddTab("World", "🌍")
+
+local function AddToggle(text, parent, key, color)
+    local btn = Instance.new("TextButton", parent)
+    btn.Size = UDim2.new(0.98, 0, 0, 42)
+    btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    btn.Text = "   " .. text
+    btn.TextColor3 = Color3.new(0.8,0.8,0.8)
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Font = Enum.Font.GothamSemibold
+    btn.TextSize = 13
+    Instance.new("UICorner", btn)
+
+    local dot = Instance.new("Frame", btn)
+    dot.Size = UDim2.new(0, 12, 0, 12)
+    dot.Position = UDim2.new(1, -25, 0.5, -6)
+    dot.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+    Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
+
+    btn.MouseButton1Click:Connect(function()
+        Settings[key] = not Settings[key]
+        TweenService:Create(dot, TweenInfo.new(0.3), {BackgroundColor3 = Settings[key] and color or Color3.fromRGB(60, 60, 80)}):Play()
+        Notify("ZENONIX", text .. " " .. (Settings[key] and "ON" or "OFF"), Settings[key] and color or Color3.new(1,0,0))
+    end)
+end
+
+-- Toggles
+AddToggle("Silent Aimlock", CombatTab, "Aimlock", Color3.fromRGB(0, 255, 255))
+AddToggle("Show Aim FOV", CombatTab, "ShowFOV", Color3.fromRGB(191, 0, 255))
+AddToggle("Hitbox Expander", CombatTab, "Hitbox", Color3.fromRGB(255, 0, 150))
+AddToggle("Kill Aura", CombatTab, "KillAura", Color3.fromRGB(255, 50, 50))
+AddToggle("Auto Click/Attack", CombatTab, "AutoAttack", Color3.fromRGB(255, 150, 0))
+
+AddToggle("ESP Boxes", VisualTab, "ESP", Color3.fromRGB(0, 255, 100))
+AddToggle("Tracer Lines", VisualTab, "Tracers", Color3.fromRGB(0, 255, 255))
+
+AddToggle("Speedhack (100)", PlayerTab, "SpeedHack", Color3.fromRGB(255, 100, 0))
+AddToggle("Infinite Jump", PlayerTab, "InfJump", Color3.fromRGB(255, 255, 255))
+AddToggle("Noclip", PlayerTab, "Noclip", Color3.fromRGB(150, 150, 150))
+AddToggle("Spinbot", PlayerTab, "Spinbot", Color3.fromRGB(255, 255, 255))
+
+AddToggle("Night Mode", WorldTab, "NightMode", Color3.fromRGB(50, 50, 255))
+AddToggle("Full Bright", WorldTab, "FullBright", Color3.fromRGB(255, 255, 100))
+
+-- ==================== [ MOBILE TOGGLE (ZENONIX LOGO) ] ====================
+local ToggleBtn = Instance.new("TextButton", ScreenGui)
+ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
+ToggleBtn.Position = UDim2.new(0, 20, 0.4, 0)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
+ToggleBtn.Text = "⌬"
+ToggleBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
+ToggleBtn.Font = Enum.Font.GothamBlack
+ToggleBtn.TextSize = 28
+Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(1, 0)
+local TStroke = Instance.new("UIStroke", ToggleBtn)
+TStroke.Color = Color3.fromRGB(191, 0, 255)
+TStroke.Thickness = 2
+MakeDraggable(ToggleBtn)
+
+ToggleBtn.MouseButton1Click:Connect(function() Main.Visible = not Main.Visible end)
+UserInputService.InputBegan:Connect(function(input) if input.KeyCode == Settings.MenuKey then Main.Visible = not Main.Visible end end)
+
+-- ==================== [ ENGINE & LOGIC ] ====================
+RunService.RenderStepped:Connect(function()
+    -- FOV Handling
+    if Settings.ShowFOV then
+        FOVCircle.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+        FOVCircle.Radius = Settings.FOVRadius
+        FOVCircle.Visible = true
+    else
+        FOVCircle.Visible = false
+    end
+
+    local char = LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+    local root = char.HumanoidRootPart
+
+    -- ESP Handling
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+            local pRoot = p.Character.HumanoidRootPart
+            local pos, onScreen = Camera:WorldToViewportPoint(pRoot.Position)
+            
+            pcall(function()
+                -- Tracers
+                if Settings.Tracers and onScreen then
+                    if not Tracers[p] then Tracers[p] = Drawing.new("Line") end
+                    Tracers[p].Visible = true
+                    Tracers[p].From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                    Tracers[p].To = Vector2.new(pos.X, pos.Y)
+                    Tracers[p].Color = Settings.ESPColor
+                elseif Tracers[p] then Tracers[p].Visible = false end
+
+                -- ESP Boxes
+                if Settings.ESP and onScreen then
+                    if not ESPBoxes[p] then ESPBoxes[p] = Drawing.new("Square") end
+                    local size = Vector2.new(2000 / pos.Z, 3000 / pos.Z)
+                    ESPBoxes[p].Visible = true
+                    ESPBoxes[p].Size = size
+                    ESPBoxes[p].Position = Vector2.new(pos.X - size.X / 2, pos.Y - size.Y / 2)
+                    ESPBoxes[p].Color = Color3.fromRGB(0, 255, 100)
+                    ESPBoxes[p].Thickness = 1.5
+                    ESPBoxes[p].Filled = false
+                elseif ESPBoxes[p] then ESPBoxes[p].Visible = false end
+            end)
+        end
+    end
+end)
+
+RunService.Heartbeat:Connect(function()
+    local char = LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+    local root = char.HumanoidRootPart
+    local hum = char.Humanoid
+
+    if Settings.NightMode then Lighting.TimeOfDay = "00:00:00" end
+    if Settings.FullBright then Lighting.Ambient = Color3.new(1,1,1) end
+    if Settings.SpeedHack then hum.WalkSpeed = Settings.SpeedValue else hum.WalkSpeed = 16 end
+    if Settings.Spinbot then root.CFrame = root.CFrame * CFrame.Angles(0, math.rad(60), 0) end
+    if Settings.Noclip then
+        for _, v in pairs(char:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end
+    end
+
+    local target = nil
+    local dist = Settings.FOVRadius
+
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character.Humanoid.Health > 0 then
+            local pRoot = p.Character.HumanoidRootPart
+            local pos, onScreen = Camera:WorldToViewportPoint(pRoot.Position)
+            
+            -- Aimlock Target Selection based on FOV
+            if onScreen then
+                local mag = (Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2) - Vector2.new(pos.X, pos.Y)).Magnitude
+                if mag < dist then dist = mag; target = p end
+            end
+
+            -- Hitbox
+            if Settings.Hitbox then
+                pRoot.Size = Vector3.new(Settings.HitboxSize, Settings.HitboxSize, Settings.HitboxSize)
+                pRoot.Transparency = 0.7
+                pRoot.CanCollide = false
+            else
+                pRoot.Size = Vector3.new(2, 2, 1)
+                pRoot.Transparency = 1
+            end
+        end
+    end
+
+    if target and target.Character then
+        local tRoot = target.Character.HumanoidRootPart
+        if Settings.Aimlock then
+            local predPos = tRoot.Position + (tRoot.Velocity * Settings.Prediction)
+            Camera.CFrame = Camera.CFrame:Lerp(CFrame.lookAt(Camera.CFrame.Position, predPos), Settings.Smoothing)
+        end
+        if Settings.KillAura and (root.Position - tRoot.Position).Magnitude < 25 then
+            local tool = char:FindFirstChildOfClass("Tool")
+            if tool then tool:Activate() end
+        end
+    end
+
+    if Settings.AutoAttack then
+        local tool = char:FindFirstChildOfClass("Tool")
+        if tool then tool:Activate() end
+    end
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    if Settings.InfJump and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
+
+Notify("ZENONIX HUB", "Successfully Loaded. Welcome to the new era!", Color3.fromRGB(191, 0, 255))
