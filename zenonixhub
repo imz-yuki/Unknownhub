@@ -170,10 +170,10 @@ local function AddTab(name, icon)
     return page
 end
 
-local CombatTab = AddTab("Combat", "⚔️")
-local VisualTab = AddTab("Visuals", "👁️")
-local PlayerTab = AddTab("Player", "🏃")
-local WorldTab = AddTab("World", "🌍")
+local CombatTab = AddTab("ĐANG BẢO TRÌ", "⚔️")
+local VisualTab = AddTab("ĐANG BẢO TRÌ", "👁️")
+local PlayerTab = AddTab("ĐANG BẢO TRÌ", "🏃")
+local WorldTab = AddTab("ĐANG BẢO TRÌ", "🌍")
 
 local function AddToggle(text, parent, key, color)
     local btn = Instance.new("TextButton", parent)
