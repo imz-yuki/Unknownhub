@@ -52,11 +52,11 @@ local TOGGLE_KEY = Enum.KeyCode.RightControl
 _G.UnknownConfig = {
     -- Aimlock Prime v16 Proximity Settings
     AimlockEnabled = true,
-    AimlockSmoothness = 0.05, -- Khóa tâm siêu tốc, dính chặt mục tiêu di chuyển nhanh
+    AimlockSmoothness = 1, -- Khóa tâm siêu tốc, dính chặt mục tiêu di chuyển nhanh
     AimlockTargetPart = "HumanoidRootPart",
     AimlockCheckTeam = true,
     AimlockFOVEnabled = true,
-    AimlockFOVRadius = 220, -- Vòng quét mục tiêu rộng lớn xung quanh
+    AimlockFOVRadius = 500, -- Vòng quét mục tiêu rộng lớn xung quanh
     
     -- Ép Siêu Hitbox Toàn Diện (Max Force Hitbox)
     PlayerHitboxEnabled = true,
