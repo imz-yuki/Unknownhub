@@ -1,10 +1,10 @@
 --[[
 ==============================================================================
-         🌌 UNKNOWN HUB MULTI-HACK SUITE v16.0 [PRIME ARCHITECT] 🌌
+         🌌 UNKNOWN HUB LOADER SUITE v17.0 [OMNIVERSE ARCHITECT] 🌌
 ==============================================================================
                DEVELOPER : MINH MEO OMNIVERSE (GOD-TIER ARCHITECT)
-               STATUS    : GLOBAL USER GUIDE + 3S SPEED CHROMA SEQUENCE
-               REVISION  : V16.0 PRIME COMPLETE SPEED FLOW INTEGRITY
+               STATUS    : CONTEXT USER GUIDE + CONDITIONAL INJECTION
+               REVISION  : V17.0 PRIME EXPANDED INJECTION MATRIX
                COMPATIBILITY : UNIVERSAL EXECUTOR COMPLIANT (UNC 100%)
 ==============================================================================
 --]]
@@ -22,20 +22,20 @@ end
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
 -- [[ KHỬ TRÙNG LẶP LOADER TRÁNH XUNG ĐỘT HỆ THỐNG ]]
-if CoreGui:FindFirstChild("UnknownLoaderUI_V16") then CoreGui.UnknownLoaderUI_V16:Destroy() end
-if playerGui:FindFirstChild("UnknownLoaderUI_V16") then playerGui.UnknownLoaderUI_V16:Destroy() end
+if CoreGui:FindFirstChild("UnknownLoaderUI_V17") then CoreGui.UnknownLoaderUI_V17:Destroy() end
+if playerGui:FindFirstChild("UnknownLoaderUI_V17") then playerGui.UnknownLoaderUI_V17:Destroy() end
 
 -- [[ KHỞI TẠO KHUNG GIAO DIỆN LOADER CYBERPUNK ]]
 local LoaderGui = Instance.new("ScreenGui")
-LoaderGui.Name = "UnknownLoaderUI_V16"
+LoaderGui.Name = "UnknownLoaderUI_V17"
 LoaderGui.ResetOnSpawn = false
 LoaderGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 pcall(function() LoaderGui.Parent = CoreGui end)
 if not LoaderGui.Parent then LoaderGui.Parent = playerGui end
 
 local Background = Instance.new("Frame")
-Background.Size = UDim2.new(0, 520, 0, 420)
-Background.Position = UDim2.new(0.5, -260, 0.5, -210)
+Background.Size = UDim2.new(0, 540, 0, 450)
+Background.Position = UDim2.new(0.5, -270, 0.5, -225)
 Background.BackgroundColor3 = Color3.fromRGB(4, 4, 7)
 Background.Active = true
 Background.Draggable = true
@@ -56,21 +56,21 @@ local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 45)
 Title.Position = UDim2.new(0, 0, 0, 12)
 Title.BackgroundTransparency = 1
-Title.Text = "Unknown Hub v16.0 [PRIME ARCHITECT EDITION]"
+Title.Text = "Unknown Hub v17.0 [OMNIVERSE ARCHITECT EDITION]"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 16
 Title.Font = Enum.Font.GothamBold
 Title.Parent = Background
 
 -- ==============================================================================
--- 📖 KHUNG HƯỚNG DẪN SỬ DỤNG TẤT CẢ LỆNH TRÊN GUI (MỌI NGƯỜI CÙNG ĐỌC)
+-- 📖 KHUNG HƯỚNG DẪN SỬ DỤNG TẤT CẢ LỆNH TRÊN GUI (CẬP NHẬT BẢN V17)
 -- ==============================================================================
 local GuideContainer = Instance.new("ScrollingFrame")
 GuideContainer.Size = UDim2.new(1, -32, 0, 240)
 GuideContainer.Position = UDim2.new(0, 16, 0, 60)
 GuideContainer.BackgroundColor3 = Color3.fromRGB(9, 7, 14)
 GuideContainer.BorderSizePixel = 0
-GuideContainer.CanvasSize = UDim2.new(0, 0, 0, 480)
+GuideContainer.CanvasSize = UDim2.new(0, 0, 0, 550)
 GuideContainer.ScrollBarThickness = 3
 GuideContainer.ScrollBarImageColor3 = Color3.fromRGB(255, 0, 128)
 GuideContainer.Parent = Background
@@ -94,23 +94,23 @@ GuidePadding.Parent = GuideContainer
 local GuideText = Instance.new("TextLabel")
 GuideText.Size = UDim2.new(1, 0, 1, 0)
 GuideText.BackgroundTransparency = 1
-GuideText.Text = "<font color='#FF0080'><b>📖 CẨM NANG VẬN HÀNH UNKNOWN HUB v16.0 PRIME</b></font>\n\n" ..
+GuideText.Text = "<font color='#FF0080'><b>📖 CẨM NANG VẬN HÀNH UNKNOWN HUB v17.0 OMNIVERSE</b></font>\n\n" ..
     "<font color='#00FFFF'><b>⚡ ĐÓNG / MỞ BẢNG ĐIỀU KHIỂN (TOGGLE UI):</b></font>\n" ..
-    "• <b>MÁY TÍNH (PC):</b> Ấn phím <font color='#00FFB4'><b>[Right Control]</b></font> (nút Ctrl nằm bên phải bàn phím gần các phím mũi tên).\n" ..
-    "• <b>ĐIỆN THOẠI (Mobile):</b> Ấn nhẹ vào <font color='#00FFB4'><b>[Icon Mờ Tròn]</b></font> trôi nổi trên màn hình do Executor tự sinh.\n\n" ..
-    "<font color='#00FFFF'><b>🎯 KHÓA TÂM AIMLOCK PROXIMITY V16 (SIÊU GHIM ĐÍCH):</b></font>\n" ..
-    "• <b>Trên PC:</b> Bật Aimlock ON -> <font color='#FFEA00'><b>[Nhấn Giữ Chuột Phải]</b></font>. Tâm ngắm tự động khóa cứng kẻ địch/quái vật ở khoảng cách 3D gần nhân vật của bạn nhất. Thả ra để tự do.\n" ..
-    "• <b>Trên Mobile:</b> Bật Aimlock ON + Bật Vòng Quét FOV -> Kẻ địch di chuyển vào vòng tròn giữa màn hình sẽ bị <font color='#FFEA00'><b>[Tự Động Khóa Camera]</b></font> đuổi theo mà không cần chạm giữ nút bấm rườm rà.\n" ..
-    "• <i>Lời khuyên:</i> Hạ thấp độ mịn (Smoothness = 0.05) để khóa siêu bạo, tăng lên (0.15) để mượt. Luôn bật Check Team khi chơi game chia đội đấu phe.\n\n" ..
+    "• <b>MÁY TÍNH (PC):</b> Ấn phím <font color='#00FFB4'><b>[Right Control]</b></font> để ẩn/hiện bảng điều khiển chính.\n" ..
+    "• <b>ĐIỆN THOẠI (Mobile):</b> Sử dụng nút bấm tròn mờ hiển thị trên màn hình hệ thống.\n\n" ..
+    "<font color='#00FFFF'><b>🎯 KHÓA TÂM AIMLOCK PROXIMITY V17:</b></font>\n" ..
+    "• <b>PC:</b> Bật Aimlock ON -> <font color='#FFEA00'><b>[Nhấn Giữ Chuột Phải]</b></font> để khóa cứng camera vào đối thủ gần nhất.\n" ..
+    "• <b>Mobile:</b> Tự động quét và hướng camera vào mục tiêu nằm trong vòng tròn FOV mà không cần giữ nút.\n\n" ..
+    "<font color='#00FFFF'><b>⚡ DỊCH CHUYỂN VIP CHUYÊN DỤNG (TELEPORT SERVICES):</b></font>\n" ..
+    "• <b>Tốc biến sau lưng:</b> Nhấn nút để ngay lập tức biến ra phía sau lưng kẻ địch gần nhất mục tiêu từ 1.5 - 3 Studs để tạo bất ngờ.\n" ..
+    "• <b>Vòng lặp triệt hạ (Loop Kill):</b> Tự động dính chặt và dịch chuyển liên tục theo vị trí di chuyển của đối phương cho đến khi đối phương bị tiêu diệt hoàn toàn.\n\n" ..
     "<font color='#00FFFF'><b>📦 ÉP SIÊU HITBOX ĐA TẦNG (OVERDRIVE):</b></font>\n" ..
-    "• <b>Cách dùng chung:</b> Bật ON mục Player Hitbox (Khi PVP) hoặc NPC Hitbox (Khi farm quái) -> Tích chọn mở rộng Đầu (Head) và Thân (Torso).\n" ..
-    "• <b>Mẹo chỉnh kích thước:</b> Điền thông số từ <font color='#00FFB4'><b>[30 đến 45]</b></font>. Cơ thể đối phương sẽ phình to ẩn trong không gian, bạn đứng từ khoảng cách xa chỉ cần chém gió hoặc tung kỹ năng diện rộng là tự trúng liên hoàn!\n\n" ..
+    "• Kích hoạt Player Hitbox hoặc NPC Hitbox -> Chỉnh size từ <font color='#00FFB4'><b>[30 đến 45]</b></font>. Điểm va chạm của mục tiêu sẽ phình to cực đại, hỗ trợ đánh trúng diện rộng tuyệt đối.\n\n" ..
     "<font color='#00FFFF'><b>👁️ THẤU THỊ MATRIX VISUALS (ESP MẮT THẦN):</b></font>\n" ..
-    "• Kích hoạt ESP Master để nhìn xuyên tường: Hiện Box (Khung viền định vị), Tracers (Vạch chỉ hướng từ dưới màn hình thẳng đến địch), Names & Health (Hiện tên, số mét khoảng cách thực tế và thanh máu động đổi màu tương ứng).\n\n" ..
-    "<font color='#00FFFF'><b>⚙️ DỊCH VỤ VẬT LÝ & TỐC ĐỘ (MISC OVERCLOCK):</b></font>\n" ..
-    "• WalkSpeed / JumpPower: Bật ON rồi tùy chỉnh thanh thông số để chạy nhanh như Flash, nhảy siêu cao né đòn.\n" ..
-    "• Noclip (Xuyên tường): Đi xuyên qua địa hình map đấu, chui hang, vượt chướng ngại vật.\n" ..
-    "• Fullbright: Xóa bỏ mọi hiệu ứng sương mù, bóng đêm âm u, đưa độ sáng toàn bản đồ lên mức cực đại."
+    "• Hỗ trợ nhìn xuyên tường toàn bản đồ bao gồm: Khung viền (Box), Đường chỉ hướng (Tracers từ đáy màn hình), Hiển thị tên (Names) và Thanh máu động (Health Bar) tự động đổi màu theo lượng máu thực tế.\n\n" ..
+    "<font color='#00FFFF'><b>⚙️ HỆ THỐNG PHÒNG THỦ & KHÁC (MISC OVERCLOCK):</b></font>\n" ..
+    "• <b>Anti-Fling:</b> Khóa cứng gia tốc góc, chống lại mọi hình thức phá hoại làm văng nhân vật.\n" ..
+    "• <b>Anti-Ragdoll:</b> Tự động đứng dậy ngay lập tức khi bị tác động vật lý gây ngã ngửa cơ thể."
 GuideText.TextColor3 = Color3.fromRGB(210, 210, 230)
 GuideText.TextSize = 12
 GuideText.Font = Enum.Font.GothamSemibold
@@ -119,7 +119,6 @@ GuideText.TextYAlignment = Enum.TextYAlignment.Top
 GuideText.RichText = true
 GuideText.Parent = GuideContainer
 
--- Cập nhật CanvasSize tự động căn chỉnh chữ
 GuideContainer.CanvasSize = UDim2.new(0, 0, 0, GuideText.TextBounds.Y + 40)
 GuideText:GetPropertyChangedSignal("TextBounds"):Connect(function()
     GuideContainer.CanvasSize = UDim2.new(0, 0, 0, GuideText.TextBounds.Y + 40)
@@ -130,7 +129,7 @@ local SubTitle = Instance.new("TextLabel")
 SubTitle.Size = UDim2.new(1, 0, 0, 20)
 SubTitle.Position = UDim2.new(0, 0, 0, 315)
 SubTitle.BackgroundTransparency = 1
-SubTitle.Text = "Hệ thống Unknown Hub đang đồng bộ cấu hình tối thượng..."
+SubTitle.Text = "Hệ thống đang kiểm tra và nạp dữ liệu cấu hình..."
 SubTitle.TextColor3 = Color3.fromRGB(150, 150, 175)
 SubTitle.TextSize = 11
 SubTitle.Font = Enum.Font.GothamSemibold
@@ -138,7 +137,7 @@ SubTitle.Parent = Background
 
 -- Thanh tiến trình Loading Bar cao cấp
 local BarBackground = Instance.new("Frame")
-BarBackground.Size = UDim2.new(0, 440, 0, 7)
+BarBackground.Size = UDim2.new(0, 440, 0, 8)
 BarBackground.Position = UDim2.new(0.5, -220, 0, 342)
 BarBackground.BackgroundColor3 = Color3.fromRGB(18, 14, 28)
 BarBackground.BorderSizePixel = 0
@@ -160,7 +159,7 @@ ProgressCorner.Parent = ProgressFill
 
 local PercentLabel = Instance.new("TextLabel")
 PercentLabel.Size = UDim2.new(1, 0, 0, 20)
-PercentLabel.Position = UDim2.new(0, 0, 0, 362)
+PercentLabel.Position = UDim2.new(0, 0, 0, 360)
 PercentLabel.BackgroundTransparency = 1
 PercentLabel.Text = "0%"
 PercentLabel.TextColor3 = Color3.fromRGB(255, 0, 128)
@@ -168,7 +167,28 @@ PercentLabel.TextSize = 13
 PercentLabel.Font = Enum.Font.GothamBold
 PercentLabel.Parent = Background
 
--- Hiệu ứng dải màu Chroma RGB lướt mượt mà bao phủ các đường nét viền UI
+-- Nút xác nhận ẩn cấu trúc (Chỉ xuất hiện khi load xong 100%)
+local ConfirmButton = Instance.new("TextButton")
+ConfirmButton.Size = UDim2.new(0, 280, 0, 36)
+ConfirmButton.Position = UDim2.new(0.5, -140, 0, 395)
+ConfirmButton.BackgroundColor3 = Color3.fromRGB(12, 8, 20)
+ConfirmButton.Text = "XÁC NHẬN ĐÃ ĐỌC HƯỚNG DẪN"
+ConfirmButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ConfirmButton.Font = Enum.Font.GothamBold
+ConfirmButton.TextSize = 11
+ConfirmButton.Visible = false
+ConfirmButton.Parent = Background
+
+local ConfirmCorner = Instance.new("UICorner")
+ConfirmCorner.CornerRadius = UDim.new(0, 8)
+ConfirmCorner.Parent = ConfirmButton
+
+local ConfirmStroke = Instance.new("UIStroke")
+ConfirmStroke.Thickness = 1.5
+ConfirmStroke.Color = Color3.fromRGB(255, 0, 128)
+ConfirmStroke.Parent = ConfirmButton
+
+-- Hiệu ứng dải màu Chroma RGB mượt mà bao phủ UI thời gian thực
 task.spawn(function()
     while LoaderGui and LoaderGui.Parent do
         local hue = (tick() % 4) / 4
@@ -177,11 +197,12 @@ task.spawn(function()
         ProgressFill.BackgroundColor3 = rgbColor
         PercentLabel.TextColor3 = rgbColor
         GuideContainer.ScrollBarImageColor3 = rgbColor
+        ConfirmStroke.Color = rgbColor
         task.wait(0.02)
     end
 end)
 
--- Vòng lặp đếm ngược bất đồng bộ chính xác 3 giây (3000ms)
+-- Vòng lặp đếm ngược bất đồng bộ chính xác 3 giây (3000ms) không bị khựng giao diện
 local duration = 3.0
 local startTick = tick()
 
@@ -196,9 +217,24 @@ while true do
     task.wait()
 end
 
-SubTitle.Text = "KÍCH HOẠT UNKNOWN HUB v16.0 THÀNH CÔNG!"
-task.wait(0.2)
-LoaderGui:Destroy()
+-- Sau khi hoàn tất 3 giây, cập nhật trạng thái và hiển thị nút xác nhận điều kiện
+SubTitle.Text = "DỮ LIỆU ĐÃ ĐỒNG BỘ! VUI LÒNG XÁC NHẬN ĐỂ KHỞI CHẠY SCRIPT"
+PercentLabel.Visible = false
+ConfirmButton.Visible = true
 
--- Thực thi tải tệp lệnh chính từ kho lưu trữ GitHub
-loadstring(game:HttpGet("https://raw.githubusercontent.com/imz-yuki/Unknownhub/refs/heads/main/allgames.lua"))()
+-- Logic xử lý sự kiện khi click nút xác nhận đã đọc hướng dẫn
+ConfirmButton.MouseButton1Click:Connect(function()
+    SubTitle.Text = "ĐANG KÍCH HOẠT UNKNOWN HUB v17.0..."
+    ConfirmButton.Active = false
+    task.wait(0.4)
+    LoaderGui:Destroy()
+    
+    -- Thực thi tải tệp lệnh chính từ kho lưu trữ GitHub an toàn
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/imz-yuki/Unknownhub/refs/heads/main/allgames.lua"))()
+    end)
+    
+    if not success then
+        warn("Lỗi khởi chạy mã nguồn chính từ GitHub: " .. tostring(err))
+    end
+end)
