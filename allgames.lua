@@ -1,27 +1,13 @@
 --[[
 ==============================================================================
-         🌌 UNKNOWN HUB MULTI-HACK SUITE v16.0 [PRIME ARCHITECT] 🌌
+         🌌 UNKNOWN HUB MULTI-HACK SUITE v17.0 [OMNIVERSE ARCHITECT] 🌌
 ==============================================================================
                DEVELOPER : MINH MEO OMNIVERSE (GOD-TIER ARCHITECT)
-               STATUS    : PROXIMITY AIM v16 & MAX HITBOX OVERDRIVE
-               REVISION  : VERSION 16.0 COMPLETE SPEED FLOW INTEGRITY
+               STATUS    : PROXIMITY AIM v17 & TELEPORT BACKSTAB OVERDRIVE
+               REVISION  : VERSION 17.0 COMPLETE EXPANDED POWER MATRIX
                MODIFICATIONS: REAL-TIME TARGET FIX / RGB CHROMA OVERLAY
                COMPATIBILITY : UNIVERSAL EXECUTOR COMPLIANT (UNC 100%)
 ==============================================================================
-
-[MỤC LỤC KIẾN TRÚC MÃ NGUỒN - OVER 1000 LINES STRUCTURE]:
-  - MODULE 1: KHỞI TẠO MÔI TRƯỜNG & KHỬ TRÙNG LẶP (ENVIRONMENT INITIATION)
-  - MODULE 2: HỆ THỐNG ĐĂNG KÝ CẤU HÌNH TOÀN CỤC (GLOBAL STATE REGISTRY)
-  - MODULE 3: BỘ KHỬ TRÙNG LẶP & CHỐNG XÓA BẢO VỆ UI (ANTI-DELETION GUARDIAN)
-  - MODULE 4: TIỆN ÍCH HOẠT HỌA NÂNG CAO (ADVANCED TWEENING UTILITIES)
-  - MODULE 5: BỘ KHUNG GIAO DIỆN CHÍNH CYBERPUNK (MAIN PANEL SPECIFICATIONS)
-  - MODULE 6: HỆ THỐNG ĐỊNH TUYẾN TAB BẤT ĐỒNG BỘ (TAB ROUTING ENGINE)
-  - MODULE 7: NHÀ MÁY KHỞI TẠO THÀNH PHẦN ĐỒ HỌA (DYNAMIC UI FACTORY)
-  - MODULE 8: HỆ THỐNG ĐỒ HỌA THẤU THỊ MATRIX (ULTRA 2D/3D ESP SYSTEM)
-  - MODULE 9: THUẬT TOÁN AIMLOCK PRIME v16 (PROXIMITY RADIAL TRACKER)
-  - MODULE 10: XỬ LÝ ÉP SIÊU VHITBOX ĐA TẦNG (MAX FORCE MULTIPLEXER HITBOX)
-  - MODULE 11: ĐIỀU CHỈNH VẬT LÝ & ĐỒNG BỘ MÔI TRƯỜNG (PHYSICS ENGINE)
-  - MODULE 12: KHỞI ĐỘNG HỆ THỐNG & PHÁT THÔNG BÁO (SYSTEM INJECTION BOOT)
 --]]
 
 -- [[ MODULE 1: KHỞI TẠO MÔI TRƯỜNG & KHỬ TRÙNG LẶP ]]
@@ -34,6 +20,7 @@ local Workspace = game:GetService("Workspace")
 local StarterGui = game:GetService("StarterGui")
 local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
+local Debris = game:GetService("Debris")
 
 local localPlayer = Players.LocalPlayer
 if not localPlayer then
@@ -44,36 +31,36 @@ end
 local PlayerGui = localPlayer:WaitForChild("PlayerGui")
 local currentCamera = Workspace.CurrentCamera
 
-local UI_IDENTIFIER = "UnknownHubUI_v160"
+local UI_IDENTIFIER = "UnknownHubUI_v170"
 local IS_UI_OPEN = true
 local TOGGLE_KEY = Enum.KeyCode.RightControl
 
 -- [[ MODULE 2: HỆ THỐNG ĐĂNG KÝ CẤU HÌNH TOÀN CỤC ]]
 _G.UnknownConfig = {
-    -- Aimlock Prime v16 Proximity Settings
+    -- Aimlock Prime v17 Proximity Settings
     AimlockEnabled = true,
-    AimlockSmoothness = 1, -- Khóa tâm siêu tốc, dính chặt mục tiêu di chuyển nhanh
+    AimlockSmoothness = 1,
     AimlockTargetPart = "HumanoidRootPart",
     AimlockCheckTeam = true,
     AimlockFOVEnabled = true,
-    AimlockFOVRadius = 500, -- Vòng quét mục tiêu rộng lớn xung quanh
+    AimlockFOVRadius = 400,
     
     -- Ép Siêu Hitbox Toàn Diện (Max Force Hitbox)
     PlayerHitboxEnabled = true,
-    PlayerHitboxSize = 35, -- Ép kích thước hitbox người chơi cực đại
+    PlayerHitboxSize = 35,
     ExpandHead = true,
     ExpandTorso = true,
     PlayerTransparency = 0.4,
     
     -- NPC/Monster Force Hitbox
     NPCHitboxEnabled = true,
-    NPCHitboxSize = 40, -- Ép tầm quét hitbox quái farm map
+    NPCHitboxSize = 40,
     NPCTransparency = 0.4,
 
     -- Advanced Visual ESP Settings
     EspEnabled = true,
     EspBoxes = true,
-    EspTracers = false,
+    EspTracers = true,
     EspNames = true,
     EspHealth = true,
     EspCheckTeam = true,
@@ -88,13 +75,20 @@ _G.UnknownConfig = {
     JumpPowerValue = 50,
     NoclipEnabled = false,
     FullbrightEnabled = false,
+    AntiFlingEnabled = true,
+    AntiRagdollEnabled = false,
+
+    -- Dịch chuyển & Ám sát (Teleport & Kill Systems)
+    TeleportBehindDistance = 3,
+    TeleportSmoothSpeed = 50,
+    LoopKillActive = false,
 
     Theme = {
         MainBg = Color3.fromRGB(3, 3, 5),
         HeaderBg = Color3.fromRGB(8, 5, 16),
         SidebarBg = Color3.fromRGB(5, 3, 8),
         CardBg = Color3.fromRGB(12, 8, 20),
-        AccentNeon = Color3.fromRGB(255, 0, 128), -- Hồng Neon Pha Lê Đậm Chất Cyber
+        AccentNeon = Color3.fromRGB(255, 0, 128),
         AlertNeon = Color3.fromRGB(255, 0, 80),
         SuccessNeon = Color3.fromRGB(0, 255, 180),
         ButtonBg = Color3.fromRGB(16, 12, 24),
@@ -149,8 +143,8 @@ FOVCircle.Color = CFG.Theme.AccentNeon
 -- [[ MODULE 5: BỘ KHUNG GIAO DIỆN CHÍNH CYBERPUNK ]]
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainPanel"
-MainFrame.Size = UDim2.new(0, 580, 0, 420)
-MainFrame.Position = UDim2.new(0.5, -290, 0.5, -210)
+MainFrame.Size = UDim2.new(0, 620, 0, 440)
+MainFrame.Position = UDim2.new(0.5, -310, 0.5, -220)
 MainFrame.BackgroundColor3 = CFG.Theme.MainBg
 MainFrame.Active = true
 MainFrame.Draggable = true
@@ -206,7 +200,7 @@ local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Size = UDim2.new(1, -40, 1, 0)
 TitleLabel.Position = UDim2.new(0, 20, 0, 0)
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "unknown hub v16.0 // PRIME ARCHITECT EDITION 🌌"
+TitleLabel.Text = "UNKNOWN HUB v17.0 // OMNIVERSE ARCHITECT EDITION 🌌"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleLabel.TextSize = 14
 TitleLabel.Font = Enum.Font.GothamBold
@@ -215,7 +209,7 @@ TitleLabel.Parent = Header
 
 local Sidebar = Instance.new("Frame")
 Sidebar.Name = "SidebarPanel"
-Sidebar.Size = UDim2.new(0, 160, 1, -75)
+Sidebar.Size = UDim2.new(0, 170, 1, -75)
 Sidebar.Position = UDim2.new(0, 12, 0, 65)
 Sidebar.BackgroundColor3 = CFG.Theme.SidebarBg
 Sidebar.Parent = MainFrame
@@ -237,8 +231,8 @@ SidebarPadding.Parent = Sidebar
 
 local ContentDisplay = Instance.new("Frame")
 ContentDisplay.Name = "ContentViewport"
-ContentDisplay.Size = UDim2.new(1, -190, 1, -75)
-ContentDisplay.Position = UDim2.new(0, 178, 0, 65)
+ContentDisplay.Size = UDim2.new(1, -210, 1, -75)
+ContentDisplay.Position = UDim2.new(0, 195, 0, 65)
 ContentDisplay.BackgroundTransparency = 1
 ContentDisplay.Parent = MainFrame
 
@@ -251,7 +245,7 @@ local function createModularPage(pageId)
     scrollFrame.Name = "Page_" .. pageId
     scrollFrame.Size = UDim2.new(1, 0, 1, 0)
     scrollFrame.BackgroundTransparency = 1
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 550)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
     scrollFrame.ScrollBarThickness = 2
     scrollFrame.ScrollBarImageColor3 = CFG.Theme.AccentNeon
     scrollFrame.Visible = false
@@ -272,6 +266,7 @@ end
 
 local pageAimPrime = createModularPage("AimPrime")
 local pageHitboxMax = createModularPage("HitboxMax")
+local pageTeleport = createModularPage("Teleport")
 local pageVisuals = createModularPage("Visuals")
 local pageMisc = createModularPage("Misc")
 
@@ -296,11 +291,11 @@ end
 
 local function registerTabSelector(label, targetPageId)
     local tabBtn = Instance.new("TextButton")
-    tabBtn.Size = UDim2.new(1, 0, 0, 40)
+    tabBtn.Size = UDim2.new(1, 0, 0, 38)
     tabBtn.BackgroundColor3 = CFG.Theme.ButtonBg
     tabBtn.Text = label
     tabBtn.TextColor3 = CFG.Theme.TextSecondary
-    tabBtn.TextSize = 11
+    tabBtn.TextSize = 10
     tabBtn.Font = Enum.Font.GothamBold
     tabBtn.Parent = Sidebar
     
@@ -314,10 +309,11 @@ local function registerTabSelector(label, targetPageId)
     return tabBtn
 end
 
-local selectorAim = registerTabSelector("🎯 PROXIMITY AIM V16", "AimPrime")
-local selectorHitbox = registerTabSelector("📦 FORCE HITBOX", "HitboxMax")
-local selectorVisual = registerTabSelector("👁️ VISUAL MATRIX", "Visuals")
-local selectorMisc = registerTabSelector("⚙️ MISC SERVICE", "Misc")
+local selectorAim = registerTabSelector("🎯 KHÓA TÂM V17", "AimPrime")
+local selectorHitbox = registerTabSelector("📦 ÉP SIÊU HITBOX", "HitboxMax")
+local selectorTeleport = registerTabSelector("⚡ DỊCH CHUYỂN VIP", "Teleport")
+local selectorVisual = registerTabSelector("👁️ THẤU THỊ MATRIX", "Visuals")
+local selectorMisc = registerTabSelector("⚙️ HỆ THỐNG KHÁC", "Misc")
 
 routeToPage("AimPrime", selectorAim)
 
@@ -361,7 +357,7 @@ function ComponentFactory:RenderToggle(parentPage, labelText, configKey)
     trigger.Size = UDim2.new(0, 80, 0, 28)
     trigger.Position = UDim2.new(1, -94, 0.5, -14)
     trigger.BackgroundColor3 = CFG[configKey] and CFG.Theme.SuccessNeon or Color3.fromRGB(50, 46, 68)
-    trigger.Text = CFG[configKey] and "ON" or "OFF"
+    trigger.Text = CFG[configKey] and "BẬT" or "TẮT"
     trigger.TextColor3 = CFG[configKey] and CFG.Theme.TextDark or CFG.Theme.TextPrimary
     trigger.Font = Enum.Font.GothamBold
     trigger.TextSize = 11
@@ -373,7 +369,7 @@ function ComponentFactory:RenderToggle(parentPage, labelText, configKey)
 
     trigger.MouseButton1Click:Connect(function()
         CFG[configKey] = not CFG[configKey]
-        trigger.Text = CFG[configKey] and "ON" or "OFF"
+        trigger.Text = CFG[configKey] and "BẬT" or "TẮT"
         TweenUtility:Create(trigger, 0.15, {
             BackgroundColor3 = CFG[configKey] and CFG.Theme.SuccessNeon or Color3.fromRGB(50, 46, 68),
             TextColor3 = CFG[configKey] and CFG.Theme.TextDark or CFG.Theme.TextPrimary
@@ -427,9 +423,43 @@ function ComponentFactory:RenderInputBox(parentPage, labelText, configKey, isStr
     end)
 end
 
+function ComponentFactory:RenderActionButton(parentPage, labelText, callback)
+    local panel = Instance.new("Frame")
+    panel.Size = UDim2.new(1, 0, 0, 48)
+    panel.BackgroundColor3 = CFG.Theme.CardBg
+    panel.Parent = parentPage
+    
+    local cardCorner = Instance.new("UICorner")
+    cardCorner.CornerRadius = UDim.new(0, 8)
+    cardCorner.Parent = panel
+
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -28, 0, 32)
+    btn.Position = UDim2.new(0, 14, 0.5, -16)
+    btn.BackgroundColor3 = CFG.Theme.ButtonBg
+    btn.Text = labelText
+    btn.TextColor3 = CFG.Theme.AccentNeon
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 12
+    btn.Parent = panel
+
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 6)
+    btnCorner.Parent = btn
+
+    local btnStroke = Instance.new("UIStroke")
+    btnStroke.Color = CFG.Theme.AccentNeon
+    btnStroke.Thickness = 1
+    btnStroke.Parent = btn
+
+    btn.MouseButton1Click:Connect(function()
+        pcall(callback)
+    end)
+end
+
 -- === ĐIỀN CẤU HÌNH HUB HOÀN CHỈNH ===
-ComponentFactory:RenderSectionHeader(pageAimPrime, "Khóa Tâm Proximity v16 PRIME (Gần Mình Nhất)")
-ComponentFactory:RenderToggle(pageAimPrime, "Kích hoạt Aimlock v16", "AimlockEnabled")
+ComponentFactory:RenderSectionHeader(pageAimPrime, "Khóa Tâm Proximity v17 PRIME")
+ComponentFactory:RenderToggle(pageAimPrime, "Kích hoạt Aimlock v17", "AimlockEnabled")
 ComponentFactory:RenderToggle(pageAimPrime, "Bỏ qua Đồng Đội (Check Team)", "AimlockCheckTeam")
 ComponentFactory:RenderInputBox(pageAimPrime, "Độ nhạy ghim mục tiêu (Smoothness)", "AimlockSmoothness", false)
 ComponentFactory:RenderToggle(pageAimPrime, "Hiển thị Vòng Quét FOV", "AimlockFOVEnabled")
@@ -444,7 +474,41 @@ ComponentFactory:RenderSectionHeader(pageHitboxMax, "Quản lý Farm NPC Quái V
 ComponentFactory:RenderToggle(pageHitboxMax, "Ép Hitbox Toàn Bộ Quái Vật", "NPCHitboxEnabled")
 ComponentFactory:RenderInputBox(pageHitboxMax, "Kích thước Hitbox Quái", "NPCHitboxSize", false)
 
-ComponentFactory:RenderSectionHeader(pageVisuals, "Thấu thị Thực thực Hệ Thống (ESP)")
+-- [[ KHU VỰC THÀNH PHẦN MỚI: TELEPORT VIP CHUYÊN DỤNG ]]
+local function getClosestPlayerRaw()
+    local target = nil
+    local shortestDist = math.huge
+    local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= localPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+            local pRoot = p.Character.HumanoidRootPart
+            local dist = (pRoot.Position - myRoot.Position).Magnitude
+            if dist < shortestDist then
+                shortestDist = dist
+                target = p
+            end
+        end
+    end
+    return target
+end
+
+local function teleportBehindTarget()
+    local target = getClosestPlayerRaw()
+    local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if target and myRoot and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local tRoot = target.Character.HumanoidRootPart
+        myRoot.CFrame = tRoot.CFrame * CFrame.new(0, 0, CFG.TeleportBehindDistance)
+    end
+end
+
+ComponentFactory:RenderSectionHeader(pageTeleport, "Dịch chuyển Ám sát (Teleport Service)")
+ComponentFactory:RenderActionButton(pageTeleport, "⚡ Tốc biến ra sau lưng địch gần nhất", teleportBehindTarget)
+ComponentFactory:RenderInputBox(pageTeleport, "Khoảng cách đứng sau lưng (Studs)", "TeleportBehindDistance", false)
+ComponentFactory:RenderToggle(pageTeleport, "Vòng lặp bám đuôi triệt hạ (Loop Kill)", "LoopKillActive")
+ComponentFactory:RenderInputBox(pageTeleport, "Tốc độ dịch chuyển mượt (Smooth)", "TeleportSmoothSpeed", false)
+
+ComponentFactory:RenderSectionHeader(pageVisuals, "Thấu thị Thực tại Hệ Thống (ESP)")
 ComponentFactory:RenderToggle(pageVisuals, "Kích hoạt ESP Master", "EspEnabled")
 ComponentFactory:RenderToggle(pageVisuals, "Hiển thị Khung Viền (Box ESP)", "EspBoxes")
 ComponentFactory:RenderToggle(pageVisuals, "Hiển thị Đường Chỉ Hướng (Tracers)", "EspTracers")
@@ -452,13 +516,15 @@ ComponentFactory:RenderToggle(pageVisuals, "Hiển thị Tên Đối Thủ", "Es
 ComponentFactory:RenderToggle(pageVisuals, "Hiển thị Thanh Máu (Health Bar)", "EspHealth")
 ComponentFactory:RenderToggle(pageVisuals, "Lọc hiển thị Đội (Check Team)", "EspCheckTeam")
 
-ComponentFactory:RenderSectionHeader(pageMisc, "Vật lý Tương Tác & Tốc Độ")
+ComponentFactory:RenderSectionHeader(pageMisc, "Vật lý Tương Tác & Chống Bẫy")
 ComponentFactory:RenderToggle(pageMisc, "Kích hoạt WalkSpeed", "WalkSpeedEnabled")
 ComponentFactory:RenderInputBox(pageMisc, "Tốc độ chạy", "WalkSpeedValue", false)
 ComponentFactory:RenderToggle(pageMisc, "Kích hoạt JumpPower", "JumpPowerEnabled")
 ComponentFactory:RenderInputBox(pageMisc, "Lực nhảy cao", "JumpPowerValue", false)
 ComponentFactory:RenderToggle(pageMisc, "Đi xuyên tường (Noclip)", "NoclipEnabled")
 ComponentFactory:RenderToggle(pageMisc, "Bật Tối Ưu Ánh Sáng (Fullbright)", "FullbrightEnabled")
+ComponentFactory:RenderToggle(pageMisc, "Chống Kẻ Địch Làm Văng (Anti-Fling)", "AntiFlingEnabled")
+ComponentFactory:RenderToggle(pageMisc, "Đứng dậy tức thì (Anti-Ragdoll)", "AntiRagdollEnabled")
 
 -- [[ MODULE 8: HỆ THỐNG ĐỒ HỌA THẤU THỊ MATRIX ]]
 local ActiveESPObjects = {}
@@ -560,8 +626,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- [[ MODULE 9: THUẬT TOÁN AIMLOCK PRIME v16 ]]
--- CỐT LÕI NÂNG CẤP: Quét bất đồng bộ tốc độ cao đa mục tiêu (Player -> NPC)
+-- [[ MODULE 9: THUẬT TOÁN AIMLOCK PRIME v17 ]]
 local function getClosestEnemyToCharacter()
     local myChar = localPlayer.Character
     local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
@@ -571,7 +636,6 @@ local function getClosestEnemyToCharacter()
     local shortestDistance = math.huge
     local mousePos = UserInputService:GetMouseLocation()
     
-    -- Ưu tiên số 1: Quét người chơi đối địch xung quanh
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= localPlayer and p.Character then
             if not (CFG.AimlockCheckTeam and checkIsTeammate(p)) then
@@ -595,7 +659,6 @@ local function getClosestEnemyToCharacter()
         end
     end
     
-    -- Ưu tiên số 2: Quét NPC / Quái vật farm nếu không tìm thấy người chơi nào ghim tâm
     if not closestTarget then
         for _, desc in ipairs(Workspace:GetChildren()) do
             if desc:IsA("Model") and desc:FindFirstChildWhichIsA("Humanoid") and not Players:GetPlayerFromCharacter(desc) then
@@ -621,7 +684,7 @@ local function getClosestEnemyToCharacter()
     return closestTarget
 end
 
--- [[ MODULE 10: XỬ LÝ ÉP SIÊU VHITBOX ĐA TẦNG ]]
+-- [[ MODULE 10: XỬ LÝ ÉP SIÊU HITBOX ĐA TẦNG ]]
 local function resetPart(part)
     if not part or not part:IsA("BasePart") then return end
     pcall(function()
@@ -631,7 +694,6 @@ local function resetPart(part)
     end)
 end
 
--- Bộ đệm quản lý cache thực thể thông minh giảm tối đa gánh nặng xử lý
 local ObjectCache = {}
 task.spawn(function()
     while true do
@@ -642,11 +704,10 @@ task.spawn(function()
             end
         end
         ObjectCache = temp
-        task.wait(0.3) -- Tăng tốc độ nạp Cache thực thể
+        task.wait(0.3)
     end
 end)
 
--- Tiến trình ép mở rộng hitbox cực đại liên tục (Overdrive Flow)
 task.spawn(function()
     while true do
         for _, model in ipairs(ObjectCache) do
@@ -683,7 +744,25 @@ task.spawn(function()
                 end
             end)
         end
-        task.wait(0.04) -- Đẩy nhanh tần suất ép va chạm thời gian thực lên 0.04s
+        task.wait(0.04)
+    end
+end)
+
+-- Vòng lặp Loop Kill bám đuôi liên tục mục tiêu gần nhất
+task.spawn(function()
+    while true do
+        if CFG.LoopKillActive then
+            pcall(function()
+                local target = getClosestPlayerRaw()
+                local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if target and myRoot and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    local tRoot = target.Character.HumanoidRootPart
+                    local targetPos = tRoot.CFrame * CFrame.new(0, 0, CFG.TeleportBehindDistance)
+                    myRoot.CFrame = myRoot.CFrame:Lerp(targetPos, 0.25)
+                end
+            end)
+        end
+        task.wait(0.01)
     end
 end)
 
@@ -692,7 +771,6 @@ local origAmbient = Lighting.Ambient
 local origOutdoor = Lighting.OutdoorAmbient
 
 RunService.RenderStepped:Connect(function()
-    -- Thực thi khóa ghim tâm Proximity v16 khi nhấn giữ Chuột phải
     if CFG.AimlockEnabled and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
         local target = getClosestEnemyToCharacter()
         if target then
@@ -706,6 +784,13 @@ RunService.RenderStepped:Connect(function()
     if hum then
         if CFG.WalkSpeedEnabled then hum.WalkSpeed = CFG.WalkSpeedValue end
         if CFG.JumpPowerEnabled then hum.JumpPower = CFG.JumpPowerValue end
+        
+        -- Tính năng Anti-Ragdoll bảo đảm trạng thái đứng vững
+        if CFG.AntiRagdollEnabled then
+            if hum:GetState() == Enum.HumanoidStateType.Ragdoll or hum:GetState() == Enum.HumanoidStateType.FallingDown then
+                hum:ChangeState(Enum.HumanoidStateType.GettingUp)
+            end
+        end
     end
     
     if CFG.FullbrightEnabled then
@@ -715,10 +800,20 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+-- Tiến trình Anti-Fling & Noclip xử lý ở vòng lặp vật lý
 RunService.Stepped:Connect(function()
-    if CFG.NoclipEnabled and localPlayer.Character then
+    if localPlayer.Character then
         for _, part in ipairs(localPlayer.Character:GetDescendants()) do
-            if part:IsA("BasePart") then part.CanCollide = false end
+            if part:IsA("BasePart") then
+                if CFG.NoclipEnabled then
+                    part.CanCollide = false
+                end
+                -- Triệt tiêu lực quay lớn nguy hiểm từ tool phá hoại
+                if CFG.AntiFlingEnabled then
+                    part.Velocity = Vector3.new(0, 0, 0)
+                    part.RotVelocity = Vector3.new(0, 0, 0)
+                end
+            end
         end
     end
 end)
@@ -727,13 +822,13 @@ end)
 UserInputService.InputBegan:Connect(function(input, gpe)
     if not gpe and input.KeyCode == TOGGLE_KEY then
         IS_UI_OPEN = not IS_UI_OPEN
-        local targetPos = IS_UI_OPEN and UDim2.new(0.5, -290, 0.5, -210) or UDim2.new(0.5, -290, 1.5, 0)
+        local targetPos = IS_UI_OPEN and UDim2.new(0.5, -310, 0.5, -220) or UDim2.new(0.5, -310, 1.5, 0)
         TweenUtility:Create(MainFrame, 0.3, {Position = targetPos}, Enum.EasingStyle.Back)
     end
 end)
 
 StarterGui:SetCore("SendNotification", {
-    Title = "𝙐𝙣𝙠𝙣𝙤𝙬𝙣 𝙃𝙪𝙗 𝙫16.0",
-    Text = "Bản nâng cấp PRIME ARCHITECT tối thượng đã kích hoạt!",
+    Title = "𝙐𝙣𝙠𝙣𝙤𝙬𝙣 𝙃𝙪𝙗 𝙫17.0",
+    Text = "Bản nâng cấp OMNIVERSE ARCHITECT tối thượng đã sẵn sàng!",
     Duration = 5
 })
