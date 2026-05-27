@@ -1,10 +1,10 @@
 --[[
 ==============================================================================
-         🌌 ZENONIX HUB OMNIVERSE v15.0 - AUTOMATED SPEED LOADER 🌌
+         🌌 UNKNOWN HUB MULTI-HACK SUITE v16.0 [PRIME ARCHITECT] 🌌
 ==============================================================================
                DEVELOPER : MINH MEO OMNIVERSE (GOD-TIER ARCHITECT)
                STATUS    : GLOBAL USER GUIDE + 3S SPEED CHROMA SEQUENCE
-               REVISION  : V15.0 COMPLETE INTERFACE OVERHAUL (ULTRA SMOOTH)
+               REVISION  : V16.0 PRIME COMPLETE SPEED FLOW INTEGRITY
                COMPATIBILITY : UNIVERSAL EXECUTOR COMPLIANT (UNC 100%)
 ==============================================================================
 --]]
@@ -21,13 +21,13 @@ if not localPlayer then
 end
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
--- [[ KHỬ TRÙNG LẶP LOADER TRÁNH XUNG ĐỘT ]]
-if CoreGui:FindFirstChild("ZenonixLoaderUI_V15") then CoreGui.ZenonixLoaderUI_V15:Destroy() end
-if playerGui:FindFirstChild("ZenonixLoaderUI_V15") then playerGui.ZenonixLoaderUI_V15:Destroy() end
+-- [[ KHỬ TRÙNG LẶP LOADER TRÁNH XUNG ĐỘT HỆ THỐNG ]]
+if CoreGui:FindFirstChild("UnknownLoaderUI_V16") then CoreGui.UnknownLoaderUI_V16:Destroy() end
+if playerGui:FindFirstChild("UnknownLoaderUI_V16") then playerGui.UnknownLoaderUI_V16:Destroy() end
 
--- [[ KHỞI TẠO KHUNG GIAO DIỆN CHÍNH ]]
+-- [[ KHỞI TẠO KHUNG GIAO DIỆN LOADER CYBERPUNK ]]
 local LoaderGui = Instance.new("ScreenGui")
-LoaderGui.Name = "ZenonixLoaderUI_V15"
+LoaderGui.Name = "UnknownLoaderUI_V16"
 LoaderGui.ResetOnSpawn = false
 LoaderGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 pcall(function() LoaderGui.Parent = CoreGui end)
@@ -51,14 +51,14 @@ FrameStroke.Color = Color3.fromRGB(255, 0, 128)
 FrameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 FrameStroke.Parent = Background
 
--- Tiêu đề chính đẳng cấp
+-- Tiêu đề chính đẳng cấp Unknown Hub
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 45)
 Title.Position = UDim2.new(0, 0, 0, 12)
 Title.BackgroundTransparency = 1
-Title.Text = "🌌 ZENONIX HUB v15.0 [SUPER ZENITH EDITION] 🌌"
+Title.Text = "𝙐𝙣𝙠𝙣𝙤𝙬𝙣 𝙃𝙪𝙗 𝙫16.0 [PRIME ARCHITECT EDITION]"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 15
+Title.TextSize = 16
 Title.Font = Enum.Font.GothamBold
 Title.Parent = Background
 
@@ -70,7 +70,7 @@ GuideContainer.Size = UDim2.new(1, -32, 0, 240)
 GuideContainer.Position = UDim2.new(0, 16, 0, 60)
 GuideContainer.BackgroundColor3 = Color3.fromRGB(9, 7, 14)
 GuideContainer.BorderSizePixel = 0
-GuideContainer.CanvasSize = UDim2.new(0, 0, 0, 480) -- Cuộn mượt mà không lo thiếu chỗ
+GuideContainer.CanvasSize = UDim2.new(0, 0, 0, 480)
 GuideContainer.ScrollBarThickness = 3
 GuideContainer.ScrollBarImageColor3 = Color3.fromRGB(255, 0, 128)
 GuideContainer.Parent = Background
@@ -94,11 +94,11 @@ GuidePadding.Parent = GuideContainer
 local GuideText = Instance.new("TextLabel")
 GuideText.Size = UDim2.new(1, 0, 1, 0)
 GuideText.BackgroundTransparency = 1
-GuideText.Text = "<font color='#FF0080'><b>📖 CẨM NANG VẬN HÀNH TOÀN DIỆN ZENONIX v15.0</b></font>\n\n" ..
+GuideText.Text = "<font color='#FF0080'><b>📖 CẨM NANG VẬN HÀNH UNKNOWN HUB v16.0 PRIME</b></font>\n\n" ..
     "<font color='#00FFFF'><b>⚡ ĐÓNG / MỞ BẢNG ĐIỀU KHIỂN (TOGGLE UI):</b></font>\n" ..
     "• <b>MÁY TÍNH (PC):</b> Ấn phím <font color='#00FFB4'><b>[Right Control]</b></font> (nút Ctrl nằm bên phải bàn phím gần các phím mũi tên).\n" ..
     "• <b>ĐIỆN THOẠI (Mobile):</b> Ấn nhẹ vào <font color='#00FFB4'><b>[Icon Mờ Tròn]</b></font> trôi nổi trên màn hình do Executor tự sinh.\n\n" ..
-    "<font color='#00FFFF'><b>🎯 KHÓA TÂM AIMLOCK PROXIMITY V15 (SIÊU GHIM ĐÍCH):</b></font>\n" ..
+    "<font color='#00FFFF'><b>🎯 KHÓA TÂM AIMLOCK PROXIMITY V16 (SIÊU GHIM ĐÍCH):</b></font>\n" ..
     "• <b>Trên PC:</b> Bật Aimlock ON -> <font color='#FFEA00'><b>[Nhấn Giữ Chuột Phải]</b></font>. Tâm ngắm tự động khóa cứng kẻ địch/quái vật ở khoảng cách 3D gần nhân vật của bạn nhất. Thả ra để tự do.\n" ..
     "• <b>Trên Mobile:</b> Bật Aimlock ON + Bật Vòng Quét FOV -> Kẻ địch di chuyển vào vòng tròn giữa màn hình sẽ bị <font color='#FFEA00'><b>[Tự Động Khóa Camera]</b></font> đuổi theo mà không cần chạm giữ nút bấm rườm rà.\n" ..
     "• <i>Lời khuyên:</i> Hạ thấp độ mịn (Smoothness = 0.05) để khóa siêu bạo, tăng lên (0.15) để mượt. Luôn bật Check Team khi chơi game chia đội đấu phe.\n\n" ..
@@ -130,7 +130,7 @@ local SubTitle = Instance.new("TextLabel")
 SubTitle.Size = UDim2.new(1, 0, 0, 20)
 SubTitle.Position = UDim2.new(0, 0, 0, 315)
 SubTitle.BackgroundTransparency = 1
-SubTitle.Text = "Hệ thống đang đồng bộ cấu hình tối thượng..."
+SubTitle.Text = "Hệ thống Unknown Hub đang đồng bộ cấu hình tối thượng..."
 SubTitle.TextColor3 = Color3.fromRGB(150, 150, 175)
 SubTitle.TextSize = 11
 SubTitle.Font = Enum.Font.GothamSemibold
@@ -168,7 +168,7 @@ PercentLabel.TextSize = 13
 PercentLabel.Font = Enum.Font.GothamBold
 PercentLabel.Parent = Background
 
--- Hiệu ứng dải màu Chroma RGB lướt mượt mà bao phủ các đường nét
+-- Hiệu ứng dải màu Chroma RGB lướt mượt mà bao phủ các đường nét viền UI
 task.spawn(function()
     while LoaderGui and LoaderGui.Parent do
         local hue = (tick() % 4) / 4
@@ -196,7 +196,7 @@ while true do
     task.wait()
 end
 
-SubTitle.Text = "KÍCH HOẠT ZENONIX HUB THÀNH CÔNG!"
+SubTitle.Text = "KÍCH HOẠT UNKNOWN HUB v16.0 THÀNH CÔNG!"
 task.wait(0.2)
 LoaderGui:Destroy()
 
