@@ -1,10 +1,10 @@
 --[[
 ==============================================================================
-         🌌 ZENONIX HUB MULTI-HACK SUITE v15.0 [SUPER ZENITH EDITION] 🌌
+         🌌 UNKNOWN HUB MULTI-HACK SUITE v16.0 [PRIME ARCHITECT] 🌌
 ==============================================================================
                DEVELOPER : MINH MEO OMNIVERSE (GOD-TIER ARCHITECT)
-               STATUS    : PROXIMITY AIM v15 & MAX HITBOX OVERDRIVE
-               REVISION  : VERSION 15.0 COMPLETE SPEED FLOW INTEGRITY
+               STATUS    : PROXIMITY AIM v16 & MAX HITBOX OVERDRIVE
+               REVISION  : VERSION 16.0 COMPLETE SPEED FLOW INTEGRITY
                MODIFICATIONS: REAL-TIME TARGET FIX / RGB CHROMA OVERLAY
                COMPATIBILITY : UNIVERSAL EXECUTOR COMPLIANT (UNC 100%)
 ==============================================================================
@@ -18,7 +18,7 @@
   - MODULE 6: HỆ THỐNG ĐỊNH TUYẾN TAB BẤT ĐỒNG BỘ (TAB ROUTING ENGINE)
   - MODULE 7: NHÀ MÁY KHỞI TẠO THÀNH PHẦN ĐỒ HỌA (DYNAMIC UI FACTORY)
   - MODULE 8: HỆ THỐNG ĐỒ HỌA THẤU THỊ MATRIX (ULTRA 2D/3D ESP SYSTEM)
-  - MODULE 9: THUẬT TOÁN AIMLOCK PRIME v15 (PROXIMITY RADIAL TRACKER)
+  - MODULE 9: THUẬT TOÁN AIMLOCK PRIME v16 (PROXIMITY RADIAL TRACKER)
   - MODULE 10: XỬ LÝ ÉP SIÊU VHITBOX ĐA TẦNG (MAX FORCE MULTIPLEXER HITBOX)
   - MODULE 11: ĐIỀU CHỈNH VẬT LÝ & ĐỒNG BỘ MÔI TRƯỜNG (PHYSICS ENGINE)
   - MODULE 12: KHỞI ĐỘNG HỆ THỐNG & PHÁT THÔNG BÁO (SYSTEM INJECTION BOOT)
@@ -44,13 +44,13 @@ end
 local PlayerGui = localPlayer:WaitForChild("PlayerGui")
 local currentCamera = Workspace.CurrentCamera
 
-local UI_IDENTIFIER = "ZenonixHubUI_v150"
+local UI_IDENTIFIER = "UnknownHubUI_v160"
 local IS_UI_OPEN = true
 local TOGGLE_KEY = Enum.KeyCode.RightControl
 
 -- [[ MODULE 2: HỆ THỐNG ĐĂNG KÝ CẤU HÌNH TOÀN CỤC ]]
-_G.ZenonixConfig = {
-    -- Aimlock Prime v15 Proximity Settings
+_G.UnknownConfig = {
+    -- Aimlock Prime v16 Proximity Settings
     AimlockEnabled = true,
     AimlockSmoothness = 0.05, -- Khóa tâm siêu tốc, dính chặt mục tiêu di chuyển nhanh
     AimlockTargetPart = "HumanoidRootPart",
@@ -103,7 +103,7 @@ _G.ZenonixConfig = {
         TextDark = Color3.fromRGB(5, 5, 5)
     }
 }
-local CFG = _G.ZenonixConfig
+local CFG = _G.UnknownConfig
 
 -- [[ MODULE 3: BỘ KHỬ TRÙNG LẶP & CHỐNG XÓA BẢO VỆ UI ]]
 local function executeEmergencyPurge()
@@ -206,9 +206,9 @@ local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Size = UDim2.new(1, -40, 1, 0)
 TitleLabel.Position = UDim2.new(0, 20, 0, 0)
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "🌌 ZENONIX HUB V15.0 // SUPER ZENITH EDITION 🌌"
+TitleLabel.Text = "𝙐𝙣𝙠𝙣𝙤𝙬𝙣 𝙃𝙪𝙗 𝙫16.0 // PRIME ARCHITECT EDITION 🌌"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 13
+TitleLabel.TextSize = 14
 TitleLabel.Font = Enum.Font.GothamBold
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 TitleLabel.Parent = Header
@@ -314,7 +314,7 @@ local function registerTabSelector(label, targetPageId)
     return tabBtn
 end
 
-local selectorAim = registerTabSelector("🎯 PROXIMITY AIM V15", "AimPrime")
+local selectorAim = registerTabSelector("🎯 PROXIMITY AIM V16", "AimPrime")
 local selectorHitbox = registerTabSelector("📦 FORCE HITBOX", "HitboxMax")
 local selectorVisual = registerTabSelector("👁️ VISUAL MATRIX", "Visuals")
 local selectorMisc = registerTabSelector("⚙️ MISC SERVICE", "Misc")
@@ -428,8 +428,8 @@ function ComponentFactory:RenderInputBox(parentPage, labelText, configKey, isStr
 end
 
 -- === ĐIỀN CẤU HÌNH HUB HOÀN CHỈNH ===
-ComponentFactory:RenderSectionHeader(pageAimPrime, "Khóa Tâm Proximity v15 (Gần Mình Nhất)")
-ComponentFactory:RenderToggle(pageAimPrime, "Kích hoạt Aimlock v15", "AimlockEnabled")
+ComponentFactory:RenderSectionHeader(pageAimPrime, "Khóa Tâm Proximity v16 PRIME (Gần Mình Nhất)")
+ComponentFactory:RenderToggle(pageAimPrime, "Kích hoạt Aimlock v16", "AimlockEnabled")
 ComponentFactory:RenderToggle(pageAimPrime, "Bỏ qua Đồng Đội (Check Team)", "AimlockCheckTeam")
 ComponentFactory:RenderInputBox(pageAimPrime, "Độ nhạy ghim mục tiêu (Smoothness)", "AimlockSmoothness", false)
 ComponentFactory:RenderToggle(pageAimPrime, "Hiển thị Vòng Quét FOV", "AimlockFOVEnabled")
@@ -444,7 +444,7 @@ ComponentFactory:RenderSectionHeader(pageHitboxMax, "Quản lý Farm NPC Quái V
 ComponentFactory:RenderToggle(pageHitboxMax, "Ép Hitbox Toàn Bộ Quái Vật", "NPCHitboxEnabled")
 ComponentFactory:RenderInputBox(pageHitboxMax, "Kích thước Hitbox Quái", "NPCHitboxSize", false)
 
-ComponentFactory:RenderSectionHeader(pageVisuals, "Thấu thị Thực thể Hệ Thống (ESP)")
+ComponentFactory:RenderSectionHeader(pageVisuals, "Thấu thị Thực thực Hệ Thống (ESP)")
 ComponentFactory:RenderToggle(pageVisuals, "Kích hoạt ESP Master", "EspEnabled")
 ComponentFactory:RenderToggle(pageVisuals, "Hiển thị Khung Viền (Box ESP)", "EspBoxes")
 ComponentFactory:RenderToggle(pageVisuals, "Hiển thị Đường Chỉ Hướng (Tracers)", "EspTracers")
@@ -560,8 +560,8 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- [[ MODULE 9: THUẬT TOÁN AIMLOCK PRIME v15 ]]
--- CỐT LÕI NÂNG CẤP: Quét Magnitude thực tế 3D để khóa chặt đối thủ đứng gần nhân vật của bạn nhất
+-- [[ MODULE 9: THUẬT TOÁN AIMLOCK PRIME v16 ]]
+-- CỐT LÕI NÂNG CẤP: Quét bất đồng bộ tốc độ cao đa mục tiêu (Player -> NPC)
 local function getClosestEnemyToCharacter()
     local myChar = localPlayer.Character
     local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
@@ -571,7 +571,7 @@ local function getClosestEnemyToCharacter()
     local shortestDistance = math.huge
     local mousePos = UserInputService:GetMouseLocation()
     
-    -- Ưu tiên số 1: Quét Người chơi khác (Enemy cận chiến áp sát)
+    -- Ưu tiên số 1: Quét người chơi đối địch xung quanh
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= localPlayer and p.Character then
             if not (CFG.AimlockCheckTeam and checkIsTeammate(p)) then
@@ -595,7 +595,7 @@ local function getClosestEnemyToCharacter()
         end
     end
     
-    -- Ưu tiên số 2: Quét NPC / Quái vật farm đứng gần mình nhất
+    -- Ưu tiên số 2: Quét NPC / Quái vật farm nếu không tìm thấy người chơi nào ghim tâm
     if not closestTarget then
         for _, desc in ipairs(Workspace:GetChildren()) do
             if desc:IsA("Model") and desc:FindFirstChildWhichIsA("Humanoid") and not Players:GetPlayerFromCharacter(desc) then
@@ -642,11 +642,11 @@ task.spawn(function()
             end
         end
         ObjectCache = temp
-        task.wait(0.4)
+        task.wait(0.3) -- Tăng tốc độ nạp Cache thực thể
     end
 end)
 
--- Tiến trình ép mở rộng hitbox cực đại liên tục
+-- Tiến trình ép mở rộng hitbox cực đại liên tục (Overdrive Flow)
 task.spawn(function()
     while true do
         for _, model in ipairs(ObjectCache) do
@@ -683,7 +683,7 @@ task.spawn(function()
                 end
             end)
         end
-        task.wait(0.06) -- Tần suất cập nhật 0.06s siêu tốc, giữ chặt va chạm thời gian thực
+        task.wait(0.04) -- Đẩy nhanh tần suất ép va chạm thời gian thực lên 0.04s
     end
 end)
 
@@ -692,7 +692,7 @@ local origAmbient = Lighting.Ambient
 local origOutdoor = Lighting.OutdoorAmbient
 
 RunService.RenderStepped:Connect(function()
-    -- Thực thi khóa ghim tâm Proximity v15 khi nhấn giữ Chuột phải
+    -- Thực thi khóa ghim tâm Proximity v16 khi nhấn giữ Chuột phải
     if CFG.AimlockEnabled and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
         local target = getClosestEnemyToCharacter()
         if target then
@@ -733,7 +733,7 @@ UserInputService.InputBegan:Connect(function(input, gpe)
 end)
 
 StarterGui:SetCore("SendNotification", {
-    Title = "🌌 ZENONIX HUB v15.0",
-    Text = "Bản hoàn chỉnh Proximity Aim & Ép Hitbox Operational!",
+    Title = "𝙐𝙣𝙠𝙣𝙤𝙬𝙣 𝙃𝙪𝙗 𝙫16.0",
+    Text = "Bản nâng cấp PRIME ARCHITECT tối thượng đã kích hoạt!",
     Duration = 5
 })
