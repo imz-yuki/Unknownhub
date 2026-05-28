@@ -38,7 +38,7 @@ local TOGGLE_KEY = Enum.KeyCode.RightControl
 _G.UnknownConfig = {
     -- Aimlock Overlord Settings
     AimlockEnabled = true,
-    AimlockSmoothness = 0.1, -- Giá trị càng nhỏ càng ghim chặt
+    AimlockSmoothness = 1, -- Giá trị càng nhỏ càng ghim chặt
     AimlockTargetPart = "HumanoidRootPart",
     AimlockCheckTeam = true,
     AimlockFOVEnabled = true,
