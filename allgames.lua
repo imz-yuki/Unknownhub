@@ -79,8 +79,8 @@ _G.UnknownConfig = {
     JumpPowerValue = 50,
     NoclipEnabled = false,
     FullbrightEnabled = false,
-    AntiFlingEnabled = true,
-    AntiRagdollEnabled = true,
+    AntiFlingEnabled = false,
+    AntiRagdollEnabled = false,
 
     -- Teleport & Absolute Assassination
     TeleportBehindDistance = 3,
