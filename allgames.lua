@@ -964,13 +964,74 @@ ComponentFactory:RenderSectionHeader(pageMisc, "Hệ thống kết nối luân c
 ComponentFactory:RenderActionButton(pageMisc, "⏩ Server Hop (Chuyển Server Ngẫu Nhiên)", executeServerHop)
 ComponentFactory:RenderActionButton(pageMisc, "🔄 Rejoin Server Hiện Tại", executeServerRejoin)
 
--- [[ MODULE 14: WINDOW INTERACTION HANDLING CONTROL ]]
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == TOGGLE_KEY then
-        IS_UI_OPEN = not IS_UI_OPEN
-        MainFrame.Visible = IS_UI_OPEN
+-- ==============================================================================
+-- [[ MODULE 14: MAIN INTERFACE DESIGN & LAYOUT OVERHAUL - IMAGE CORE ENGINE ]]
+-- ==============================================================================
+
+-- Đường dẫn liên kết RAW trực tiếp tới ảnh nền trên GitHub của bạn
+local BG_IMAGE_URL = "https://raw.githubusercontent.com/imz-yuki/Unknownhub/main/038cb2fd9f70f207fcd8f2d0c6562f38.jpg"
+local BG_CACHE_FILE = "UnknownHub_PremiumBG_v18.jpg"
+
+if ScreenGui:FindFirstChild("MainFrame") then ScreenGui.MainFrame:Destroy() end
+
+-- Thay đổi từ "Frame" thông thường sang "ImageLabel" để làm nền ảnh
+local MainFrame = Instance.new("ImageLabel")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 560, 0, 420) -- Kích thước Menu chuẩn rộng rãi
+MainFrame.Position = UDim2.new(0.5, -280, 0.5, -210) -- Căn giữa màn hình hiển thị
+MainFrame.BackgroundColor3 = Color3.fromRGB(12, 10, 22) -- Màu nền chờ mờ khi đang nạp ảnh
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true -- Cho phép kéo thả menu di chuyển khắp màn hình
+MainFrame.ScaleType = Enum.ScaleType.Crop -- Ép ảnh tự động tràn đều khung, KHÔNG BỊ MÉO ẢNH
+MainFrame.Visible = IS_UI_OPEN
+MainFrame.Parent = ScreenGui
+
+-- Tạo lớp phủ tối mịn để chữ tính năng nổi lên rõ ràng, dễ nhìn hơn
+MainFrame.ImageColor3 = Color3.fromRGB(200, 200, 200) -- Giảm nhẹ độ chói của ảnh gốc
+-- Độ trong suốt của ảnh nền (Bạn có thể chỉnh từ 0 đến 1 tùy ý thích)
+MainFrame.ImageTransparency = 0.12 
+
+-- Thiết kế bo góc cao cấp cho khung nền ảnh
+local FrameCorner = Instance.new("UICorner")
+FrameCorner.CornerRadius = UDim.new(0, 16) -- Bo tròn viền góc ảnh 16 pixel cực mượt
+FrameCorner.Parent = MainFrame
+
+-- Dải viền Neon bảo vệ chạy Chroma đổi màu xung quanh mép ảnh nền
+local FrameStroke = Instance.new("UIStroke")
+FrameStroke.Thickness = 2.5
+FrameStroke.Color = CFG.Theme.AccentNeon or Color3.fromRGB(255, 0, 128)
+FrameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+FrameStroke.Parent = MainFrame
+
+-- Thuật toán nạp ngầm (Background Task) tải ảnh nền từ GitHub tránh drop FPS
+task.spawn(function()
+    if not isfile(BG_CACHE_FILE) then
+        local success, result = pcall(function()
+            return game:HttpGet(BG_IMAGE_URL)
+        end)
+        if success and result then
+            writefile(BG_CACHE_FILE, result)
+        end
+    end
+
+    if isfile(BG_CACHE_FILE) then
+        pcall(function()
+            MainFrame.Image = getcustomasset(BG_CACHE_FILE)
+        end)
     end
 end)
+
+-- Hiệu ứng Chroma RGB nhấp nháy chuyển màu cho viền bao quanh ảnh nền thời gian thực
+task.spawn(function()
+    while MainFrame and MainFrame.Parent do
+        local hue = (tick() % 5) / 5
+        FrameStroke.Color = Color3.fromHSV(hue, 0.9, 1)
+        task.wait(0.03)
+    end
+end)
+
+print("🌌 MODULE 14 COMPLETED: Ép ảnh nền GitHub phá tan không gian đen xì thành công!")
 
 -- ==============================================================================
 -- [[ MODULE 15: FLOATING BUTTON + CONTROL PANEL - ULTRA PREMIUM IMAGE EDITION ]]
