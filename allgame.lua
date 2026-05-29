@@ -44,10 +44,8 @@ LoaderGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 pcall(function() LoaderGui.Parent = CoreGui end)
 if not LoaderGui.Parent then LoaderGui.Parent = playerGui end
 
--- Đường dẫn liên kết RAW tới ảnh trên GitHub của bạn
--- Đường dẫn liên kết RAW tới ảnh GIF mới trên GitHub của bạn
-local BG_IMAGE_URL = "https://raw.githubusercontent.com/imz-yuki/Unknownhub/main/anh.gif"
-local BG_CACHE_FILE = "UnknownHub_NewLoaderBG_v18.gif" -- Đổi tên file cache để hệ thống tải lại ảnh mới
+local BG_IMAGE_URL = "https://raw.githubusercontent.com/imz-yuki/Unknownhub/main/e8336015cda776546253a0977982fe75.jpg"
+local BG_CACHE_FILE = "UnknownHub_Premium_FixedBG.jpg" -- Tên file cache mới để ép hệ thống tải lại ảnh chuẩn
 
 -- ÉP CHUYỂN ĐỔI SANG IMAGELABEL ĐỂ PHÁ TAN KHÔNG GIAN ĐEN XÌ
 local Background = Instance.new("ImageLabel")
