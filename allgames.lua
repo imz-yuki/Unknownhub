@@ -45,7 +45,8 @@ _G.UnknownConfig = {
     AimlockFOVRadius = 750,
     AimPrediction = true,
     AimPredictionVelocity = 0.165,
-    
+    AimAtHead = false,   -- Thêm dòng này
+
     -- Hitbox Overdrive Matrix
     PlayerHitboxEnabled = true,
     PlayerHitboxSize = 35,
@@ -244,18 +245,24 @@ ContentDisplay.Position = UDim2.new(0, 200, 0, 65)
 ContentDisplay.BackgroundTransparency = 1
 ContentDisplay.Parent = MainFrame
 
--- [[ MODULE 6: ADVANCED TAB ROUTING MATRIX ]]
+-- [[ MODULE 6: ADVANCED TAB ROUTING MATRIX - HOÀN CHỈNH (Fix Đen + Animation)]]
+
 local RegisteredPages = {}
 local CurrentActiveButton = nil
+local CurrentPage = nil
+local TweenInProgress = false
 
+-- Tạo trang (ScrollingFrame)
 local function createModularPage(pageId)
     local scrollFrame = Instance.new("ScrollingFrame")
     scrollFrame.Name = "Page_" .. pageId
     scrollFrame.Size = UDim2.new(1, 0, 1, 0)
+    scrollFrame.Position = UDim2.new(0, 0, 0, 0)
     scrollFrame.BackgroundTransparency = 1
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 650)
-    scrollFrame.ScrollBarThickness = 2
+    scrollFrame.BorderSizePixel = 0
+    scrollFrame.ScrollBarThickness = 4
     scrollFrame.ScrollBarImageColor3 = CFG.Theme.AccentNeon
+    scrollFrame.ScrollBarImageTransparency = 0.6
     scrollFrame.Visible = false
     scrollFrame.Parent = ContentDisplay
     
@@ -265,38 +272,85 @@ local function createModularPage(pageId)
     listLayout.Parent = scrollFrame
     
     listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 25)
+        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 30)
     end)
     
     RegisteredPages[pageId] = scrollFrame
     return scrollFrame
 end
 
+-- Tạo các Page
 local pageAimPrime = createModularPage("AimPrime")
 local pageHitboxMax = createModularPage("HitboxMax")
 local pageTeleport = createModularPage("Teleport")
 local pageVisuals = createModularPage("Visuals")
 local pageMisc = createModularPage("Misc")
 
+-- Hàm chuyển tab có animation mượt + fix đen
 local function routeToPage(pageId, triggerButton)
-    for id, pageObj in pairs(RegisteredPages) do
-        pageObj.Visible = (id == pageId)
+    if TweenInProgress then return end
+    TweenInProgress = true
+
+    local targetPage = RegisteredPages[pageId]
+    if not targetPage then 
+        TweenInProgress = false
+        return 
     end
-    
+
+    -- Animation cho nút tab
     if CurrentActiveButton and CurrentActiveButton ~= triggerButton then
         TweenUtility:Create(CurrentActiveButton, 0.2, {
             BackgroundColor3 = CFG.Theme.ButtonBg,
             TextColor3 = CFG.Theme.TextSecondary
         })
     end
-    
+
     CurrentActiveButton = triggerButton
     TweenUtility:Create(triggerButton, 0.2, {
         BackgroundColor3 = CFG.Theme.HeaderBg,
         TextColor3 = CFG.Theme.AccentNeon
     })
+
+    -- Chuyển trang
+    if CurrentPage and CurrentPage ~= targetPage then
+        -- Fade out trang cũ
+        TweenUtility:Create(CurrentPage, 0.18, {BackgroundTransparency = 1})
+        
+        for _, child in ipairs(CurrentPage:GetDescendants()) do
+            if child:IsA("Frame") and child.BackgroundTransparency < 1 then
+                TweenUtility:Create(child, 0.18, {BackgroundTransparency = 1})
+            elseif child:IsA("TextLabel") or child:IsA("TextButton") then
+                TweenUtility:Create(child, 0.18, {TextTransparency = 1})
+            end
+        end
+    end
+
+    -- Hiển thị trang mới
+    targetPage.Visible = true
+    targetPage.BackgroundTransparency = 1
+
+    task.spawn(function()
+        TweenUtility:Create(targetPage, 0.25, {BackgroundTransparency = 1})
+
+        for _, child in ipairs(targetPage:GetDescendants()) do
+            if child:IsA("Frame") then
+                TweenUtility:Create(child, 0.25, {BackgroundTransparency = 0})
+            elseif child:IsA("TextLabel") or child:IsA("TextButton") then
+                TweenUtility:Create(child, 0.25, {TextTransparency = 0})
+            end
+        end
+
+        task.wait(0.28)
+        if CurrentPage and CurrentPage ~= targetPage then
+            CurrentPage.Visible = false
+        end
+        
+        CurrentPage = targetPage
+        TweenInProgress = false
+    end)
 end
 
+-- Tạo nút Tab
 local function registerTabSelector(label, targetPageId)
     local tabBtn = Instance.new("TextButton")
     tabBtn.Size = UDim2.new(1, 0, 0, 38)
@@ -317,13 +371,17 @@ local function registerTabSelector(label, targetPageId)
     return tabBtn
 end
 
+-- Đăng ký Tab
 local selectorAim = registerTabSelector("🎯 KHÓA TÂM PRO V18", "AimPrime")
 local selectorHitbox = registerTabSelector("📦 ÉP SIÊU HITBOX", "HitboxMax")
 local selectorTeleport = registerTabSelector("⚡ ÁM SÁT COVERT", "Teleport")
 local selectorVisual = registerTabSelector("👁️ OVERLOAD ESP", "Visuals")
 local selectorMisc = registerTabSelector("⚙️ HỆ THỐNG MỞ RỘNG", "Misc")
 
+-- Mở tab mặc định
 routeToPage("AimPrime", selectorAim)
+
+print("🌌 MODULE 6 HOÀN CHỈNH - TAB ANIMATION ĐÃ FIX!")
 
 -- [[ MODULE 7: GUI COMPONENTS FACTORY ENGINE ]]
 local ComponentFactory = {}
@@ -460,39 +518,18 @@ function ComponentFactory:RenderActionButton(parentPage, labelText, callback)
     end)
 end
 
--- [[ MODULE 8: CORE MECHANICS & LOGIC PROCESSING MATRIX ]]
+-- [[ MODULE 8: AIMLOCK PRO - AUTO AIM (Bật là aim luôn) + Aim Đầu / Thân ]]
 
--- Tiện ích tìm kiếm mục tiêu (Teammate Validator)
+-- Tiện ích kiểm tra đồng đội
 local function checkIsTeammate(player)
     if not player then return false end
-    if not CFG.EspCheckTeam and not CFG.AimlockCheckTeam then return false end
+    if not CFG.AimlockCheckTeam then return false end
     if player.Team and localPlayer.Team and player.Team == localPlayer.Team then return true end
     if player:FindFirstChild("Leader") and localPlayer:FindFirstChild("Leader") and player.Leader.Value == localPlayer.Leader.Value then return true end
     return false
 end
 
--- Bộ quét thực thể gần nhất thô (Raw Player Scanner)
-local function getClosestPlayerRaw()
-    local target = nil
-    local shortestDist = math.huge
-    local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if not myRoot then return nil end
-    for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= localPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-            if not checkIsTeammate(p) then
-                local pRoot = p.Character.HumanoidRootPart
-                local dist = (pRoot.Position - myRoot.Position).Magnitude
-                if dist < shortestDist then
-                    shortestDist = dist
-                    target = p
-                end
-            end
-        end
-    end
-    return target
-end
-
--- Thuật toán tìm kiếm khóa tâm nâng cấp v18 (Aimlock Core)
+-- Lấy mục tiêu gần nhất theo FOV
 local function getClosestEnemyToMouse()
     local myChar = localPlayer.Character
     local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
@@ -502,12 +539,15 @@ local function getClosestEnemyToMouse()
     local shortestDistance = math.huge
     local mousePos = UserInputService:GetMouseLocation()
     
-    -- Quét đối thủ là người chơi thực tế
+    -- Chọn aim vào Đầu hay Thân
+    local targetPartName = CFG.AimAtHead and "Head" or CFG.AimlockTargetPart
+
+    -- Quét người chơi
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= localPlayer and p.Character then
-            if not (CFG.AimlockCheckTeam and checkIsTeammate(p)) then
-                local part = p.Character:FindFirstChild(CFG.AimlockTargetPart)
+            if not checkIsTeammate(p) then
                 local hum = p.Character:FindFirstChildWhichIsA("Humanoid")
+                local part = p.Character:FindFirstChild(targetPartName) or p.Character:FindFirstChild("HumanoidRootPart")
                 
                 if part and hum and hum.Health > 0 then
                     local screenPos, onScreen = currentCamera:WorldToViewportPoint(part.Position)
@@ -525,12 +565,12 @@ local function getClosestEnemyToMouse()
         end
     end
     
-    -- Nếu không có người chơi thì quét quái vật (NPC) trong map đấu
+    -- Quét NPC nếu không tìm thấy người chơi
     if not closestTarget then
         for _, desc in ipairs(Workspace:GetChildren()) do
             if desc:IsA("Model") and desc:FindFirstChildWhichIsA("Humanoid") and not Players:GetPlayerFromCharacter(desc) then
-                local part = desc:FindFirstChild(CFG.AimlockTargetPart)
                 local hum = desc:FindFirstChildWhichIsA("Humanoid")
+                local part = desc:FindFirstChild(targetPartName) or desc:FindFirstChild("HumanoidRootPart")
                 
                 if part and hum and hum.Health > 0 then
                     local screenPos, onScreen = currentCamera:WorldToViewportPoint(part.Position)
@@ -550,13 +590,14 @@ local function getClosestEnemyToMouse()
     return closestTarget
 end
 
--- Kích hoạt vòng lặp xử lý Aimlock ghim camera mượt (Velocity Prediction Interface)
+-- ==================== AIMLOCK AUTO ====================
 RunService.RenderStepped:Connect(function()
-    if CFG.AimlockEnabled and UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+    if CFG.AimlockEnabled then
         local target = getClosestEnemyToMouse()
         if target then
             local targetPosition = target.Position
-            -- Tính toán dự đoán quỹ đạo di chuyển vật lý của mục tiêu
+            
+            -- Velocity Prediction
             if CFG.AimPrediction and target.Parent:FindFirstChild("HumanoidRootPart") then
                 targetPosition = targetPosition + (target.Parent.HumanoidRootPart.Velocity * CFG.AimPredictionVelocity)
             end
@@ -566,6 +607,8 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
+
+print("✅ Aimlock AUTO + Aim Đầu/Thân đã được cập nhật!")
 
 -- [[ MODULE 9: THUẬT TOÁN ÉP HITBOX & LÀM RỖNG CACHE ]]
 local function resetPart(part)
@@ -875,11 +918,13 @@ end
 -- [[ MODULE 13: RENDER RENDERING FULL ELEMENTS TAB PANEL ]]
 ComponentFactory:RenderSectionHeader(pageAimPrime, "Khóa Tâm Proximity v18 PRIME")
 ComponentFactory:RenderToggle(pageAimPrime, "Kích hoạt Aimlock v18", "AimlockEnabled")
+ComponentFactory:RenderToggle(pageAimPrime, "Aim Vào Đầu (Head)", "AimAtHead")
 ComponentFactory:RenderToggle(pageAimPrime, "Bỏ qua Đồng Đội (Check Team)", "AimlockCheckTeam")
 ComponentFactory:RenderToggle(pageAimPrime, "Dự đoán quỹ đạo (Prediction)", "AimPrediction")
 ComponentFactory:RenderInputBox(pageAimPrime, "Độ mịn Ghim Tâm (Smoothness)", "AimlockSmoothness", false)
 ComponentFactory:RenderToggle(pageAimPrime, "Hiển thị Vòng Quét FOV", "AimlockFOVEnabled")
 ComponentFactory:RenderInputBox(pageAimPrime, "Bán kính Vòng Quét FOV", "AimlockFOVRadius", false)
+
 
 ComponentFactory:RenderSectionHeader(pageHitboxMax, "Ép Siêu Hitbox Đa Tầng (Overdrive)")
 ComponentFactory:RenderToggle(pageHitboxMax, "Ép Hitbox Người Chơi", "PlayerHitboxEnabled")
