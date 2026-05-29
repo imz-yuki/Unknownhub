@@ -972,35 +972,39 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- [[ MODULE 15: FLOATING BUTTON + CONTROL PANEL - ULTRA PREMIUM (Đẹp Sang)]]
+-- ==============================================================================
+-- [[ MODULE 15: FLOATING BUTTON + CONTROL PANEL - ULTRA PREMIUM IMAGE EDITION ]]
+-- ==============================================================================
 
 local scriptEnabled = true
 local FloatingButton = nil
 
--- ==================== NÚT TRÒN NỔI CAO CẤP ====================
+-- Đường dẫn liên kết RAW trực tiếp tới ảnh JPG trên GitHub của bạn
+local GITHUB_IMAGE_URL = "https://raw.githubusercontent.com/imz-yuki/Unknownhub/main/038cb2fd9f70f207fcd8f2d0c6562f38.jpg"
+local IMAGE_CACHE_NAME = "UnknownHub_Logo_v18.jpg"
+
+-- ==================== NÚT TRÒN NỔI ẢNH CAO CẤP ====================
 local function createFloatingButton()
     if FloatingButton then FloatingButton:Destroy() end
 
-    FloatingButton = Instance.new("TextButton")
+    -- Khởi tạo ImageButton thay vì TextButton để ép đè hình ảnh mượt mà
+    FloatingButton = Instance.new("ImageButton")
     FloatingButton.Name = "UnknownHub_FloatingPro"
     FloatingButton.Size = UDim2.new(0, 70, 0, 70)
     FloatingButton.Position = UDim2.new(0, 25, 0.42, 0)
-    FloatingButton.BackgroundColor3 = Color3.fromRGB(255, 0, 128)
-    FloatingButton.Text = "୨୧"
-    FloatingButton.TextColor3 = Color3.new(1, 1, 1)
-    FloatingButton.TextSize = 34
-    FloatingButton.Font = Enum.Font.GothamBold
+    FloatingButton.BackgroundColor3 = Color3.fromRGB(4, 4, 7)
     FloatingButton.ZIndex = 10000
+    FloatingButton.Visible = not MainFrame.Visible -- Đồng bộ trạng thái ban đầu
     FloatingButton.Parent = ScreenGui
 
-    -- Bo tròn hoàn hảo + Glow
+    -- Bo tròn hoàn hảo bức ảnh thành hình tròn (Avatar Premium Style)
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = FloatingButton
 
     local stroke = Instance.new("UIStroke")
     stroke.Thickness = 4
-    stroke.Color = Color3.new(1,1,1)
+    stroke.Color = Color3.new(1, 1, 1)
     stroke.Transparency = 0.2
     stroke.Parent = FloatingButton
 
@@ -1010,20 +1014,40 @@ local function createFloatingButton()
     glow.Transparency = 0.6
     glow.Parent = FloatingButton
 
-    -- Hiệu ứng hover đẹp
+    -- Thuật toán tải ngầm và ép ảnh từ GitHub vào bộ nhớ cache Executor
+    task.spawn(function()
+        if not isfile(IMAGE_CACHE_NAME) then
+            local success, result = pcall(function()
+                return game:HttpGet(GITHUB_IMAGE_URL)
+            end)
+            if success and result then
+                writefile(IMAGE_CACHE_NAME, result)
+            end
+        end
+
+        if isfile(IMAGE_CACHE_NAME) then
+            pcall(function()
+                FloatingButton.Image = getcustomasset(IMAGE_CACHE_NAME)
+            end)
+        end
+    end)
+
+    -- Hiệu ứng hover co giãn đẹp + Đậm vùng Glow phát sáng
     FloatingButton.MouseEnter:Connect(function()
         TweenService:Create(FloatingButton, TweenInfo.new(0.25, Enum.EasingStyle.Back), {
             Size = UDim2.new(0, 78, 0, 78)
         }):Play()
+        TweenService:Create(glow, TweenInfo.new(0.25), { Transparency = 0.3, Thickness = 15 }):Play()
     end)
 
     FloatingButton.MouseLeave:Connect(function()
         TweenService:Create(FloatingButton, TweenInfo.new(0.25, Enum.EasingStyle.Quad), {
             Size = UDim2.new(0, 70, 0, 70)
         }):Play()
+        TweenService:Create(glow, TweenInfo.new(0.25), { Transparency = 0.6, Thickness = 12 }):Play()
     end)
 
-    -- Kéo di chuyển mượt (PC + Mobile)
+    -- Hệ thống kéo di chuyển mượt mà đa nền tảng (PC + Mobile)
     local dragging = false
     local dragStart, startPos
 
@@ -1048,7 +1072,7 @@ local function createFloatingButton()
         end
     end)
 
-    -- Click hiện GUI
+    -- Click chuột vào ảnh -> Mở giao diện chính mượt mà
     FloatingButton.MouseButton1Click:Connect(function()
         scriptEnabled = true
         MainFrame.Visible = true
@@ -1072,7 +1096,7 @@ local function createControlButtons()
     stroke.Color = CFG.Theme.AccentNeon
     stroke.Thickness = 1.8
 
-    -- Nút ON/OFF
+    -- Nút ON/OFF trạng thái hệ thống
     local ToggleBtn = Instance.new("TextButton")
     ToggleBtn.Size = UDim2.new(0.5, -8, 1, -12)
     ToggleBtn.Position = UDim2.new(0, 6, 0, 6)
@@ -1084,7 +1108,7 @@ local function createControlButtons()
     ToggleBtn.Parent = ControlFrame
     Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(0, 10)
 
-    -- Nút Destroy
+    -- Nút gỡ bỏ GUI (Destroy)
     local DestroyBtn = Instance.new("TextButton")
     DestroyBtn.Size = UDim2.new(0.5, -8, 1, -12)
     DestroyBtn.Position = UDim2.new(0.5, 2, 0, 6)
@@ -1126,15 +1150,15 @@ local function createControlButtons()
     updateToggleUI()
 end
 
--- Khởi tạo
+-- Khởi tạo thành phần
 createControlButtons()
 createFloatingButton()
 
--- Đồng bộ nút tròn
+-- Thiết lập đồng bộ ẩn hiện thời gian thực giữa Nút Tròn và MainFrame
 MainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
     if FloatingButton then
         FloatingButton.Visible = not MainFrame.Visible
     end
 end)
 
-print("🌌 MODULE 15 ULTRA PREMIUM đã được cập nhật!")
+print("🌌 MODULE 15 ULTRA PREMIUM IMAGE EDITION đã được cập nhật hoàn chỉnh!")
