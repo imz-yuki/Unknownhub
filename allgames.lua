@@ -682,12 +682,26 @@ task.spawn(function()
     end
 end)
 
--- [[ MODULE 10: ADVANCED COVERT TELEPORT SYSTEMS ]]
+-- [[ MODULE 10: ADVANCED COVERT TELEPORT SYSTEMS - FIXED & OPTIMIZED ]]
+
+-- Hàm phụ trợ lấy nhân vật (Model) của kẻ địch gần chuột nhất để phục vụ dịch chuyển
+local function getClosestPlayerModel()
+    local targetPart = getClosestEnemyToMouse() -- Tái sử dụng hàm quét từ Module 8
+    if targetPart and targetPart.Parent then
+        return targetPart.Parent -- Trả về Model nhân vật (chứa HumanoidRootPart)
+    end
+    return nil
+end
+
+-- Tính năng: Tốc biến ra sau lưng kẻ địch gần nhất
 local function teleportBehindTarget()
-    local target = getClosestPlayerRaw()
-    local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if target and myRoot and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-        local tRoot = target.Character.HumanoidRootPart
+    local targetModel = getClosestPlayerModel()
+    local myChar = localPlayer.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    
+    if targetModel and myRoot and targetModel:FindFirstChild("HumanoidRootPart") then
+        local tRoot = targetModel.HumanoidRootPart
+        -- Dịch chuyển CFrame ra sau lưng đối thủ dựa trên khoảng cách thiết lập trong cấu hình
         myRoot.CFrame = tRoot.CFrame * CFrame.new(0, 0, CFG.TeleportBehindDistance)
     end
 end
@@ -697,32 +711,37 @@ task.spawn(function()
     while true do
         if CFG.LoopKillActive then
             pcall(function()
-                local target = getClosestPlayerRaw()
-                local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if target and myRoot and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                    local tRoot = target.Character.HumanoidRootPart
+                local targetModel = getClosestPlayerModel()
+                local myChar = localPlayer.Character
+                local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+                
+                if targetModel and myRoot and targetModel:FindFirstChild("HumanoidRootPart") then
+                    local tRoot = targetModel.HumanoidRootPart
+                    -- Tính toán vị trí đứng sau lưng đối thủ
                     local targetPos = tRoot.CFrame * CFrame.new(0, 0, CFG.TeleportBehindDistance)
+                    -- Di chuyển mượt mà (Lerp) bám sát theo mục tiêu
                     myRoot.CFrame = myRoot.CFrame:Lerp(targetPos, 0.3)
                 end
             end)
         end
-        task.wait(0.01)
+        task.wait(0.01) -- Giữ tần suất quét cao để không bị mất dấu khi đối thủ di chuyển nhanh
     end
 end)
 
--- Tính năng bổ sung cao cấp v18: Kill Aura tự động định hướng đòn đánh
+-- Tính năng: Kill Aura tự động định hướng đòn đánh hướng về phía mục tiêu
 task.spawn(function()
     while true do
         if CFG.KillAuraActive then
             pcall(function()
-                local myRoot = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+                local myChar = localPlayer.Character
+                local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
                 if myRoot then
                     for _, p in ipairs(Players:GetPlayers()) do
                         if p ~= localPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
                             local enemyRoot = p.Character.HumanoidRootPart
                             local distance = (enemyRoot.Position - myRoot.Position).Magnitude
                             if distance <= CFG.KillAuraRadius and not checkIsTeammate(p) then
-                                -- Mô phỏng luồng nhìn hướng mục tiêu phục vụ skill
+                                -- Xoay hướng nhân vật của bạn đối diện với kẻ địch để tối ưu hóa tầm đánh (Hitbox)
                                 myRoot.CFrame = CFrame.new(myRoot.Position, Vector3.new(enemyRoot.Position.X, myRoot.Position.Y, enemyRoot.Position.Z))
                             end
                         end
@@ -733,6 +752,8 @@ task.spawn(function()
         task.wait(0.02)
     end
 end)
+
+print("✅ MODULE 10: Sửa lỗi gọi hàm thành công, hệ thống dịch chuyển đã sẵn sàng!")
 
 -- [[ MODULE 11: MATRIX ESP OVERLOAD ENGINE & CHAMS CONTROLLER ]]
 local ActiveESPObjects = {}
