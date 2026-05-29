@@ -1,10 +1,10 @@
 --[[
 ==============================================================================
-         🌌 UNKNOWN HUB LOADER SUITE v18.0 [NEO-OMNIVERSE OVERDRIVE] 🌌
+         🌌 UNKNOWN HUB LOADER SUITE v18.0 [NEO-OMNIVERSE OVERDRIVE PREMIUM] 🌌
 ==============================================================================
                DEVELOPER : MINH MEO OMNIVERSE (GOD-TIER ARCHITECT)
-               STATUS    : EXPANDED KNOWLEDGE BASE + OPTIMIZED UI
-               REVISION  : V18.0 ULTRA REFINED INJECTION MATRIX
+               STATUS    : EXPANDED KNOWLEDGE BASE + AUDIO INTEGRATED UI
+               REVISION  : V18.0 ULTRA REFINED INJECTION MATRIX (IMAGE CORE)
                COMPATIBILITY : UNIVERSAL EXECUTOR COMPLIANT (UNC 100%)
 ==============================================================================
 --]]
@@ -13,6 +13,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local SoundService = game:GetService("SoundService")
 
 local localPlayer = Players.LocalPlayer
 if not localPlayer then
@@ -25,6 +26,16 @@ local playerGui = localPlayer:WaitForChild("PlayerGui")
 if CoreGui:FindFirstChild("UnknownLoaderUI_V18") then CoreGui.UnknownLoaderUI_V18:Destroy() end
 if playerGui:FindFirstChild("UnknownLoaderUI_V18") then playerGui.UnknownLoaderUI_V18:Destroy() end
 
+-- [[ HỆ THỐNG PHÁT NHẠC NỀN CAO CẤP ]]
+local LoaderMusic = Instance.new("Sound")
+LoaderMusic.Name = "UnknownHub_LoaderTrack"
+-- Bạn có thể thay đổi ID âm thanh (Roblox Asset ID) tùy thích ở dòng dưới đây:
+LoaderMusic.SoundId = "rbxassetid://1837874711" or "rbxassetid://9043887091" 
+LoaderMusic.Volume = 0.6
+LoaderMusic.Looped = true
+LoaderMusic.Parent = SoundService
+pcall(function() LoaderMusic:Play() end)
+
 -- [[ KHỞI TẠO KHUNG GIAO DIỆN LOADER CYBERPUNK ]]
 local LoaderGui = Instance.new("ScreenGui")
 LoaderGui.Name = "UnknownLoaderUI_V18"
@@ -33,12 +44,22 @@ LoaderGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 pcall(function() LoaderGui.Parent = CoreGui end)
 if not LoaderGui.Parent then LoaderGui.Parent = playerGui end
 
-local Background = Instance.new("Frame")
+-- Đường dẫn liên kết RAW tới ảnh trên GitHub của bạn
+-- Đường dẫn liên kết RAW tới ảnh GIF mới trên GitHub của bạn
+local BG_IMAGE_URL = "https://raw.githubusercontent.com/imz-yuki/Unknownhub/main/anh.gif"
+local BG_CACHE_FILE = "UnknownHub_NewLoaderBG_v18.gif" -- Đổi tên file cache để hệ thống tải lại ảnh mới
+
+-- ÉP CHUYỂN ĐỔI SANG IMAGELABEL ĐỂ PHÁ TAN KHÔNG GIAN ĐEN XÌ
+local Background = Instance.new("ImageLabel")
 Background.Size = UDim2.new(0, 540, 0, 450)
 Background.Position = UDim2.new(0.5, -270, 0.5, -225)
-Background.BackgroundColor3 = Color3.fromRGB(4, 4, 7)
+Background.BackgroundColor3 = Color3.fromRGB(15, 12, 28) -- Màu nền chờ khi nạp ảnh ngầm
+Background.BorderSizePixel = 0
 Background.Active = true
 Background.Draggable = true
+Background.ScaleType = Enum.ScaleType.Crop -- Ép ảnh tự động tràn đều khung, KHÔNG BỊ MÉO ẢNH
+Background.ImageColor3 = Color3.fromRGB(180, 180, 180) -- Hạ nhẹ độ chói giúp văn bản rõ nét hơn
+Background.ImageTransparency = 0.12 -- Hòa quyện ảnh nền mờ ảo đẳng cấp
 Background.Parent = LoaderGui
 
 local MainCorner = Instance.new("UICorner")
@@ -50,6 +71,24 @@ FrameStroke.Thickness = 2.5
 FrameStroke.Color = Color3.fromRGB(255, 0, 128)
 FrameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 FrameStroke.Parent = Background
+
+-- Thuật toán nạp ngầm ảnh nền từ kho lưu trữ GitHub của bạn
+task.spawn(function()
+    if not isfile(BG_CACHE_FILE) then
+        local success, result = pcall(function()
+            return game:HttpGet(BG_IMAGE_URL)
+        end)
+        if success and result then
+            writefile(BG_CACHE_FILE, result)
+        end
+    end
+
+    if isfile(BG_CACHE_FILE) then
+        pcall(function()
+            Background.Image = getcustomasset(BG_CACHE_FILE)
+        end)
+    end
+end)
 
 -- Tiêu đề chính đẳng cấp Unknown Hub V18
 local Title = Instance.new("TextLabel")
@@ -69,8 +108,9 @@ local GuideContainer = Instance.new("ScrollingFrame")
 GuideContainer.Size = UDim2.new(1, -32, 0, 240)
 GuideContainer.Position = UDim2.new(0, 16, 0, 60)
 GuideContainer.BackgroundColor3 = Color3.fromRGB(9, 7, 14)
+GuideContainer.BackgroundTransparency = 0.25 -- Làm mờ bảng hướng dẫn để lộ lớp ảnh phía sau cực nghệ
 GuideContainer.BorderSizePixel = 0
-GuideContainer.CanvasSize = UDim2.new(0, 0, 0, 750) -- Tăng kích thước canvas cho nội dung mới
+GuideContainer.CanvasSize = UDim2.new(0, 0, 0, 780) -- Tăng canvas cho phần thông tin server
 GuideContainer.ScrollBarThickness = 3
 GuideContainer.ScrollBarImageColor3 = Color3.fromRGB(255, 0, 128)
 GuideContainer.Parent = Background
@@ -92,9 +132,11 @@ GuidePadding.PaddingRight = UDim.new(0, 14)
 GuidePadding.Parent = GuideContainer
 
 local GuideText = Instance.new("TextLabel")
-GuideText.Size = UDim2.new(1, 0, 0, 0) -- Sử dụng Auto-Sizing động bên dưới
+GuideText.Size = UDim2.new(1, 0, 0, 0)
 GuideText.BackgroundTransparency = 1
 GuideText.Text = "<font color='#FF0080'><b>📖 CẨM NANG VẬN HÀNH UNKNOWN HUB v18.0 NEO-OMNIVERSE</b></font>\n\n" ..
+    "<font color='#00FFFF'><b>📢 OFFICIAL SUPPORT SERVER (OWNER YUKI):</b></font>\n" ..
+    "• <b>Cộng đồng hỗ trợ chính thức:</b> <font color='#00FFB4'><b>discord.gg/A5hv7YVp2</b></font>\n\n" ..
     "<font color='#00FFFF'><b>⚡ ĐÓNG / MỞ BẢNG ĐIỀU KHIỂN (TOGGLE UI):</b></font>\n" ..
     "• <b>MÁY TÍNH (PC):</b> Ấn phím <font color='#00FFB4'><b>[Right Control]</b></font> để ẩn/hiện bảng điều khiển chính.\n" ..
     "• <b>ĐIỆN THOẠI (Mobile):</b> Sử dụng nút bấm tròn mờ hiển thị trên màn hình hệ thống.\n\n" ..
@@ -109,7 +151,8 @@ GuideText.Text = "<font color='#FF0080'><b>📖 CẨM NANG VẬN HÀNH UNKNOWN H
     "<font color='#00FFFF'><b>👁️ THẤU THỊ MATRIX VISUALS (ESP MẮT THẦN):</b></font>\n" ..
     "• Hỗ trợ nhìn xuyên tường toàn bản đồ bao gồm: Khung viền (Box), Đường chỉ hướng (Tracers từ đáy màn hình), Hiển thị tên (Names) và Thanh máu động (Health Bar) tự động đổi màu theo lượng máu thực tế.\n\n" ..
     "<font color='#FFAA00'><b>🔥 TÍNH NĂNG MỚI ĐƯỢC CẬP NHẬT TRÊN BẢN V18:</b></font>\n" ..
-    "• <b>Auto-Inject Streamlined:</b> Thuật toán nạp ngầm tối ưu hóa, tự động xử lý tài nguyên mà không làm giảm FPS của game.\n" ..
+    "• <b>Audio Master Module:</b> Hệ thống âm thanh nền sống động chạy song song luồng tải.\n" ..
+    "• <b>Auto-Inject Streamlined:</b> Thuật toán nạp ngầm tối ưu hóa tài nguyên, không làm giảm FPS.\n" ..
     "• <b>Bypass Kiểm Duyệt Chặt Chẽ:</b> Cơ chế mã hóa nâng cao giúp các tính năng hoạt động mượt mà trên môi trường Universal Executor (UNC 100%).\n\n" ..
     "<font color='#00FFFF'><b>⚙️ HỆ THỐNG PHÒNG THỦ & KHÁC (MISC OVERCLOCK):</b></font>\n" ..
     "• <b>Anti-Fling:</b> Khóa cứng gia tốc góc, chống lại mọi hình thức phá hoại làm văng nhân vật.\n" ..
@@ -122,7 +165,6 @@ GuideText.TextYAlignment = Enum.TextYAlignment.Top
 GuideText.RichText = true
 GuideText.Parent = GuideContainer
 
--- Tự động tính toán CanvasSize chính xác dựa trên độ dài văn bản mới
 GuideText.Size = UDim2.new(1, 0, 0, GuideText.TextBounds.Y)
 GuideContainer.CanvasSize = UDim2.new(0, 0, 0, GuideText.TextBounds.Y + 40)
 GuideText:GetPropertyChangedSignal("TextBounds"):Connect(function()
@@ -146,6 +188,7 @@ local BarBackground = Instance.new("Frame")
 BarBackground.Size = UDim2.new(0, 440, 0, 8)
 BarBackground.Position = UDim2.new(0.5, -220, 0, 342)
 BarBackground.BackgroundColor3 = Color3.fromRGB(18, 14, 28)
+BarBackground.BackgroundTransparency = 0.3
 BarBackground.BorderSizePixel = 0
 BarBackground.Parent = Background
 
@@ -173,7 +216,7 @@ PercentLabel.TextSize = 13
 PercentLabel.Font = Enum.Font.GothamBold
 PercentLabel.Parent = Background
 
--- Nút xác nhận xuất hiện khi hoàn thành nạp
+-- Nút xác nhận xuất hiện khi hoàn thành nạp (GIỮ NGUYÊN ĐẸP VÀ SANG)
 local ConfirmButton = Instance.new("TextButton")
 ConfirmButton.Size = UDim2.new(0, 280, 0, 36)
 ConfirmButton.Position = UDim2.new(0.5, -140, 0, 395)
@@ -208,7 +251,7 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp đếm ngược bất đồng bộ chính xác 3 giây (3000ms) không bị khựng giao diện
+-- Vòng lặp đếm ước bất đồng bộ chính xác 3 giây (3000ms) không bị khựng giao diện
 local duration = 3.0
 local startTick = tick()
 
@@ -232,6 +275,18 @@ ConfirmButton.Visible = true
 ConfirmButton.MouseButton1Click:Connect(function()
     SubTitle.Text = "ĐANG KÍCH HOẠT UNKNOWN HUB v18.0..."
     ConfirmButton.Active = false
+    
+    -- Hiệu ứng giảm âm lượng nhạc nền nhỏ dần (Fade out) khi tắt Loader
+    task.spawn(function()
+        for i = 10, 0, -1 do
+            if LoaderMusic then
+                LoaderMusic.Volume = (i / 10) * 0.6
+                task.wait(0.04)
+            end
+        end
+        if LoaderMusic then LoaderMusic:Destroy() end
+    end)
+    
     task.wait(0.4)
     LoaderGui:Destroy()
     
