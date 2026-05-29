@@ -148,27 +148,15 @@ FOVCircle.Filled = false
 FOVCircle.Transparency = 0.9
 FOVCircle.Color = CFG.Theme.AccentNeon
 
--- [[ MODULE 5: MASTER CORE GUI BUILDER - PREMIUM IMAGE BACKGROUND EDITION ]]
-
-local BG_IMAGE_URL = "https://raw.githubusercontent.com/imz-yuki/Unknownhub/main/038cb2fd9f70f207fcd8f2d0c6562f38.jpg"
-local BG_CACHE_FILE = "UnknownHub_PremiumBG_v18.jpg"
-
--- Thay đổi cấu trúc từ "Frame" thường sang "ImageLabel" để ép ảnh nền
-local MainFrame = Instance.new("ImageLabel")
+-- [[ MODULE 5: MASTER CORE GUI BUILDER ]]
+local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainPanel"
 MainFrame.Size = UDim2.new(0, 660, 0, 460)
 MainFrame.Position = UDim2.new(0.5, -330, 0.5, -230)
-MainFrame.BackgroundColor3 = Color3.fromRGB(12, 10, 22) -- Màu nền chờ mờ khi đang nạp ảnh từ Github
-MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundColor3 = CFG.Theme.MainBg
 MainFrame.Active = true
 MainFrame.Draggable = true
-MainFrame.ScaleType = Enum.ScaleType.Crop -- Ép ảnh tự động tràn đều khung menu, KHÔNG BỊ CO MÉO ẢNH
-MainFrame.Visible = IS_UI_OPEN
 MainFrame.Parent = ScreenGui
-
--- Lớp phủ làm dịu ảnh nền giúp chữ và các nút tính năng bên trong hiển thị rõ nét hơn
-MainFrame.ImageColor3 = Color3.fromRGB(190, 190, 190) -- Giảm nhẹ độ chói
-MainFrame.ImageTransparency = 0.15 -- Tạo độ mờ nhẹ hòa vào nền tối
 
 local MainCorner = Instance.new("UICorner")
 MainCorner.CornerRadius = UDim.new(0, 12)
@@ -179,24 +167,6 @@ OuterStroke.Color = CFG.Theme.AccentNeon
 OuterStroke.Thickness = 2.2
 OuterStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 OuterStroke.Parent = MainFrame
-
--- Thuật toán nạp ngầm ảnh nền mèo từ kho lưu trữ GitHub tốc độ cao
-task.spawn(function()
-    if not isfile(BG_CACHE_FILE) then
-        local success, result = pcall(function()
-            return game:HttpGet(BG_IMAGE_URL)
-        end)
-        if success and result then
-            writefile(BG_CACHE_FILE, result)
-        end
-    end
-
-    if isfile(BG_CACHE_FILE) then
-        pcall(function()
-            MainFrame.Image = getcustomasset(BG_CACHE_FILE)
-        end)
-    end
-end)
 
 -- Vòng lặp tối ưu hóa tính toán Chroma Overlay & Đồng bộ vòng quét Mouse FOV
 task.spawn(function()
@@ -221,7 +191,6 @@ local Header = Instance.new("Frame")
 Header.Name = "HeaderBar"
 Header.Size = UDim2.new(1, 0, 0, 55)
 Header.BackgroundColor3 = CFG.Theme.HeaderBg
-Header.BackgroundTransparency = 0.2 -- Làm mờ nhẹ Header để lộ một phần ảnh nền phía sau
 Header.BorderSizePixel = 0
 Header.Parent = MainFrame
 
@@ -233,7 +202,6 @@ local HeaderMask = Instance.new("Frame")
 HeaderMask.Size = UDim2.new(1, 0, 0, 15)
 HeaderMask.Position = UDim2.new(0, 0, 1, -15)
 HeaderMask.BackgroundColor3 = CFG.Theme.HeaderBg
-HeaderMask.BackgroundTransparency = 0.2
 HeaderMask.BorderSizePixel = 0
 HeaderMask.Parent = Header
 
@@ -253,7 +221,6 @@ Sidebar.Name = "SidebarPanel"
 Sidebar.Size = UDim2.new(0, 175, 1, -75)
 Sidebar.Position = UDim2.new(0, 12, 0, 65)
 Sidebar.BackgroundColor3 = CFG.Theme.SidebarBg
-Sidebar.BackgroundTransparency = 0.25 -- Làm mờ thanh Sidebar để lộ dáng ảnh nền cực chất
 Sidebar.Parent = MainFrame
 
 local SidebarCorner = Instance.new("UICorner")
@@ -277,6 +244,7 @@ ContentDisplay.Size = UDim2.new(1, -215, 1, -75)
 ContentDisplay.Position = UDim2.new(0, 200, 0, 65)
 ContentDisplay.BackgroundTransparency = 1
 ContentDisplay.Parent = MainFrame
+
 -- [[ MODULE 6: ADVANCED TAB ROUTING MATRIX - HOÀN CHỈNH (Fix Đen + Animation)]]
 
 local RegisteredPages = {}
