@@ -1,5 +1,8 @@
 {
-    "tanyableu3": true,
+    "tanyableu3": {
+        "wl": true,
+        "kickSignal": true
+    },
     "ythpqb": true,
     "noobahii": true,
     "hy9yb213": true,
