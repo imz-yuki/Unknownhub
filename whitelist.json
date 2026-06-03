@@ -13,6 +13,6 @@
     "meatt0_o": true,
     "nguthebaoanhngu": {
         "wl": true,
-        "kickSignal": true
+        "kickSignal": false
     }
 }
