@@ -11,5 +11,8 @@
     "minhhuy15052011": true,
     "ducanhhaha14": true,
     "meatt0_o": true,
-    "nguthebaoanhngu": true
+    "nguthebaoanhngu": {
+        "wl": true,
+        "kickSignal": true
+    }
 }
